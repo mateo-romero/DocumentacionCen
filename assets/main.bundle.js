@@ -97,42 +97,47 @@ function print() { __p += __j.call(arguments, '') }
 `),C.hasAttribute("data-start")||C.setAttribute("data-start",String(_+1))}O.textContent=M,o.highlightElement(O)},function(M){C.setAttribute(a,i),O.textContent=M})}}),o.plugins.fileHighlight={highlight:function(C){for(var O=(C||document).querySelectorAll(y),E=0,R;R=O[E++];)o.highlightElement(R)}};var S=!1;o.fileHighlight=function(){S||(console.warn("Prism.fileHighlight is deprecated. Use `Prism.plugins.fileHighlight.highlight` instead."),S=!0),o.plugins.fileHighlight.highlight.apply(this,arguments)}}()},2357:(P,v,r)=>{const g=Symbol("SemVer ANY");class o{static get ANY(){return g}constructor(y,u){if(u=t(u),y instanceof o){if(y.loose===!!u.loose)return y;y=y.value}a("comparator",y,u),this.options=u,this.loose=!!u.loose,this.parse(y),this.semver===g?this.value="":this.value=this.operator+this.semver.version,a("comp",this)}parse(y){const u=this.options.loose?p[c.COMPARATORLOOSE]:p[c.COMPARATOR],f=y.match(u);if(!f)throw new TypeError(`Invalid comparator: ${y}`);this.operator=f[1]!==void 0?f[1]:"",this.operator==="="&&(this.operator=""),f[2]?this.semver=new d(f[2],this.options.loose):this.semver=g}toString(){return this.value}test(y){if(a("Comparator.test",y,this.options.loose),this.semver===g||y===g)return!0;if(typeof y=="string")try{y=new d(y,this.options)}catch(u){return!1}return l(y,this.operator,this.semver,this.options)}intersects(y,u){if(!(y instanceof o))throw new TypeError("a Comparator is required");if((!u||typeof u!="object")&&(u={loose:!!u,includePrerelease:!1}),this.operator==="")return this.value===""?!0:new m(y.value,u).test(this.value);if(y.operator==="")return y.value===""?!0:new m(this.value,u).test(y.semver);const f=(this.operator===">="||this.operator===">")&&(y.operator===">="||y.operator===">"),S=(this.operator==="<="||this.operator==="<")&&(y.operator==="<="||y.operator==="<"),h=this.semver.version===y.semver.version,C=(this.operator===">="||this.operator==="<=")&&(y.operator===">="||y.operator==="<="),O=l(this.semver,"<",y.semver,u)&&(this.operator===">="||this.operator===">")&&(y.operator==="<="||y.operator==="<"),E=l(this.semver,">",y.semver,u)&&(this.operator==="<="||this.operator==="<")&&(y.operator===">="||y.operator===">");return f||S||h&&C||O||E}}P.exports=o;const t=r(1938),{re:p,t:c}=r(1247),l=r(7835),a=r(1498),d=r(9370),m=r(2223)},2223:(P,v,r)=>{class g{constructor(B,z){if(z=p(z),B instanceof g)return B.loose===!!z.loose&&B.includePrerelease===!!z.includePrerelease?B:new g(B.raw,z);if(B instanceof c)return this.raw=B.value,this.set=[[B]],this.format(),this;if(this.options=z,this.loose=!!z.loose,this.includePrerelease=!!z.includePrerelease,this.raw=B,this.set=B.split("||").map(V=>this.parseRange(V.trim())).filter(V=>V.length),!this.set.length)throw new TypeError(`Invalid SemVer Range: ${B}`);if(this.set.length>1){const V=this.set[0];if(this.set=this.set.filter(U=>!f(U[0])),this.set.length===0)this.set=[V];else if(this.set.length>1){for(const U of this.set)if(U.length===1&&S(U[0])){this.set=[U];break}}}this.format()}format(){return this.range=this.set.map(B=>B.join(" ").trim()).join("||").trim(),this.range}toString(){return this.range}parseRange(B){B=B.trim();const V=`parseRange:${Object.keys(this.options).join(",")}:${B}`,U=t.get(V);if(U)return U;const $=this.options.loose,H=$?d[m.HYPHENRANGELOOSE]:d[m.HYPHENRANGE];B=B.replace(H,I(this.options.includePrerelease)),l("hyphen replace",B),B=B.replace(d[m.COMPARATORTRIM],i),l("comparator trim",B),B=B.replace(d[m.TILDETRIM],y),B=B.replace(d[m.CARETTRIM],u),B=B.split(/\s+/).join(" ");let te=B.split(" ").map(ge=>C(ge,this.options)).join(" ").split(/\s+/).map(ge=>_(ge,this.options));$&&(te=te.filter(ge=>(l("loose invalid filter",ge,this.options),!!ge.match(d[m.COMPARATORLOOSE])))),l("range list",te);const re=new Map,ce=te.map(ge=>new c(ge,this.options));for(const ge of ce){if(f(ge))return[ge];re.set(ge.value,ge)}re.size>1&&re.has("")&&re.delete("");const ne=[...re.values()];return t.set(V,ne),ne}intersects(B,z){if(!(B instanceof g))throw new TypeError("a Range is required");return this.set.some(V=>h(V,z)&&B.set.some(U=>h(U,z)&&V.every($=>U.every(H=>$.intersects(H,z)))))}test(B){if(!B)return!1;if(typeof B=="string")try{B=new a(B,this.options)}catch(z){return!1}for(let z=0;z<this.set.length;z++)if(w(this.set[z],B,this.options))return!0;return!1}}P.exports=g;const o=r(9662),t=new o({max:1e3}),p=r(1938),c=r(2357),l=r(1498),a=r(9370),{re:d,t:m,comparatorTrimReplace:i,tildeTrimReplace:y,caretTrimReplace:u}=r(1247),f=F=>F.value==="<0.0.0-0",S=F=>F.value==="",h=(F,B)=>{let z=!0;const V=F.slice();let U=V.pop();for(;z&&V.length;)z=V.every($=>U.intersects($,B)),U=V.pop();return z},C=(F,B)=>(l("comp",F,B),F=T(F,B),l("caret",F),F=E(F,B),l("tildes",F),F=M(F,B),l("xrange",F),F=x(F,B),l("stars",F),F),O=F=>!F||F.toLowerCase()==="x"||F==="*",E=(F,B)=>F.trim().split(/\s+/).map(z=>R(z,B)).join(" "),R=(F,B)=>{const z=B.loose?d[m.TILDELOOSE]:d[m.TILDE];return F.replace(z,(V,U,$,H,te)=>{l("tilde",F,V,U,$,H,te);let re;return O(U)?re="":O($)?re=`>=${U}.0.0 <${+U+1}.0.0-0`:O(H)?re=`>=${U}.${$}.0 <${U}.${+$+1}.0-0`:te?(l("replaceTilde pr",te),re=`>=${U}.${$}.${H}-${te} <${U}.${+$+1}.0-0`):re=`>=${U}.${$}.${H} <${U}.${+$+1}.0-0`,l("tilde return",re),re})},T=(F,B)=>F.trim().split(/\s+/).map(z=>N(z,B)).join(" "),N=(F,B)=>{l("caret",F,B);const z=B.loose?d[m.CARETLOOSE]:d[m.CARET],V=B.includePrerelease?"-0":"";return F.replace(z,(U,$,H,te,re)=>{l("caret",F,U,$,H,te,re);let ce;return O($)?ce="":O(H)?ce=`>=${$}.0.0${V} <${+$+1}.0.0-0`:O(te)?$==="0"?ce=`>=${$}.${H}.0${V} <${$}.${+H+1}.0-0`:ce=`>=${$}.${H}.0${V} <${+$+1}.0.0-0`:re?(l("replaceCaret pr",re),$==="0"?H==="0"?ce=`>=${$}.${H}.${te}-${re} <${$}.${H}.${+te+1}-0`:ce=`>=${$}.${H}.${te}-${re} <${$}.${+H+1}.0-0`:ce=`>=${$}.${H}.${te}-${re} <${+$+1}.0.0-0`):(l("no pr"),$==="0"?H==="0"?ce=`>=${$}.${H}.${te}${V} <${$}.${H}.${+te+1}-0`:ce=`>=${$}.${H}.${te}${V} <${$}.${+H+1}.0-0`:ce=`>=${$}.${H}.${te} <${+$+1}.0.0-0`),l("caret return",ce),ce})},M=(F,B)=>(l("replaceXRanges",F,B),F.split(/\s+/).map(z=>D(z,B)).join(" ")),D=(F,B)=>{F=F.trim();const z=B.loose?d[m.XRANGELOOSE]:d[m.XRANGE];return F.replace(z,(V,U,$,H,te,re)=>{l("xRange",F,V,U,$,H,te,re);const ce=O($),ne=ce||O(H),ge=ne||O(te),be=ge;return U==="="&&be&&(U=""),re=B.includePrerelease?"-0":"",ce?U===">"||U==="<"?V="<0.0.0-0":V="*":U&&be?(ne&&(H=0),te=0,U===">"?(U=">=",ne?($=+$+1,H=0,te=0):(H=+H+1,te=0)):U==="<="&&(U="<",ne?$=+$+1:H=+H+1),U==="<"&&(re="-0"),V=`${U+$}.${H}.${te}${re}`):ne?V=`>=${$}.0.0${re} <${+$+1}.0.0-0`:ge&&(V=`>=${$}.${H}.0${re} <${$}.${+H+1}.0-0`),l("xRange return",V),V})},x=(F,B)=>(l("replaceStars",F,B),F.trim().replace(d[m.STAR],"")),_=(F,B)=>(l("replaceGTE0",F,B),F.trim().replace(d[B.includePrerelease?m.GTE0PRE:m.GTE0],"")),I=F=>(B,z,V,U,$,H,te,re,ce,ne,ge,be,Le)=>(O(V)?z="":O(U)?z=`>=${V}.0.0${F?"-0":""}`:O($)?z=`>=${V}.${U}.0${F?"-0":""}`:H?z=`>=${z}`:z=`>=${z}${F?"-0":""}`,O(ce)?re="":O(ne)?re=`<${+ce+1}.0.0-0`:O(ge)?re=`<${ce}.${+ne+1}.0-0`:be?re=`<=${ce}.${ne}.${ge}-${be}`:F?re=`<${ce}.${ne}.${+ge+1}-0`:re=`<=${re}`,`${z} ${re}`.trim()),w=(F,B,z)=>{for(let V=0;V<F.length;V++)if(!F[V].test(B))return!1;if(B.prerelease.length&&!z.includePrerelease){for(let V=0;V<F.length;V++)if(l(F[V].semver),F[V].semver!==c.ANY&&F[V].semver.prerelease.length>0){const U=F[V].semver;if(U.major===B.major&&U.minor===B.minor&&U.patch===B.patch)return!0}return!1}return!0}},9370:(P,v,r)=>{const g=r(1498),{MAX_LENGTH:o,MAX_SAFE_INTEGER:t}=r(7075),{re:p,t:c}=r(1247),l=r(1938),{compareIdentifiers:a}=r(5532);class d{constructor(i,y){if(y=l(y),i instanceof d){if(i.loose===!!y.loose&&i.includePrerelease===!!y.includePrerelease)return i;i=i.version}else if(typeof i!="string")throw new TypeError(`Invalid Version: ${i}`);if(i.length>o)throw new TypeError(`version is longer than ${o} characters`);g("SemVer",i,y),this.options=y,this.loose=!!y.loose,this.includePrerelease=!!y.includePrerelease;const u=i.trim().match(y.loose?p[c.LOOSE]:p[c.FULL]);if(!u)throw new TypeError(`Invalid Version: ${i}`);if(this.raw=i,this.major=+u[1],this.minor=+u[2],this.patch=+u[3],this.major>t||this.major<0)throw new TypeError("Invalid major version");if(this.minor>t||this.minor<0)throw new TypeError("Invalid minor version");if(this.patch>t||this.patch<0)throw new TypeError("Invalid patch version");u[4]?this.prerelease=u[4].split(".").map(f=>{if(/^[0-9]+$/.test(f)){const S=+f;if(S>=0&&S<t)return S}return f}):this.prerelease=[],this.build=u[5]?u[5].split("."):[],this.format()}format(){return this.version=`${this.major}.${this.minor}.${this.patch}`,this.prerelease.length&&(this.version+=`-${this.prerelease.join(".")}`),this.version}toString(){return this.version}compare(i){if(g("SemVer.compare",this.version,this.options,i),!(i instanceof d)){if(typeof i=="string"&&i===this.version)return 0;i=new d(i,this.options)}return i.version===this.version?0:this.compareMain(i)||this.comparePre(i)}compareMain(i){return i instanceof d||(i=new d(i,this.options)),a(this.major,i.major)||a(this.minor,i.minor)||a(this.patch,i.patch)}comparePre(i){if(i instanceof d||(i=new d(i,this.options)),this.prerelease.length&&!i.prerelease.length)return-1;if(!this.prerelease.length&&i.prerelease.length)return 1;if(!this.prerelease.length&&!i.prerelease.length)return 0;let y=0;do{const u=this.prerelease[y],f=i.prerelease[y];if(g("prerelease compare",y,u,f),u===void 0&&f===void 0)return 0;if(f===void 0)return 1;if(u===void 0)return-1;if(u===f)continue;return a(u,f)}while(++y)}compareBuild(i){i instanceof d||(i=new d(i,this.options));let y=0;do{const u=this.build[y],f=i.build[y];if(g("prerelease compare",y,u,f),u===void 0&&f===void 0)return 0;if(f===void 0)return 1;if(u===void 0)return-1;if(u===f)continue;return a(u,f)}while(++y)}inc(i,y){switch(i){case"premajor":this.prerelease.length=0,this.patch=0,this.minor=0,this.major++,this.inc("pre",y);break;case"preminor":this.prerelease.length=0,this.patch=0,this.minor++,this.inc("pre",y);break;case"prepatch":this.prerelease.length=0,this.inc("patch",y),this.inc("pre",y);break;case"prerelease":this.prerelease.length===0&&this.inc("patch",y),this.inc("pre",y);break;case"major":(this.minor!==0||this.patch!==0||this.prerelease.length===0)&&this.major++,this.minor=0,this.patch=0,this.prerelease=[];break;case"minor":(this.patch!==0||this.prerelease.length===0)&&this.minor++,this.patch=0,this.prerelease=[];break;case"patch":this.prerelease.length===0&&this.patch++,this.prerelease=[];break;case"pre":if(this.prerelease.length===0)this.prerelease=[0];else{let u=this.prerelease.length;for(;--u>=0;)typeof this.prerelease[u]=="number"&&(this.prerelease[u]++,u=-2);u===-1&&this.prerelease.push(0)}y&&(a(this.prerelease[0],y)===0?isNaN(this.prerelease[1])&&(this.prerelease=[y,0]):this.prerelease=[y,0]);break;default:throw new Error(`invalid increment argument: ${i}`)}return this.format(),this.raw=this.version,this}}P.exports=d},4343:(P,v,r)=>{const g=r(1743),o=(t,p)=>{const c=g(t.trim().replace(/^[=v]+/,""),p);return c?c.version:null};P.exports=o},7835:(P,v,r)=>{const g=r(5550),o=r(865),t=r(3182),p=r(2004),c=r(9846),l=r(8239),a=(d,m,i,y)=>{switch(m){case"===":return typeof d=="object"&&(d=d.version),typeof i=="object"&&(i=i.version),d===i;case"!==":return typeof d=="object"&&(d=d.version),typeof i=="object"&&(i=i.version),d!==i;case"":case"=":case"==":return g(d,i,y);case"!=":return o(d,i,y);case">":return t(d,i,y);case">=":return p(d,i,y);case"<":return c(d,i,y);case"<=":return l(d,i,y);default:throw new TypeError(`Invalid operator: ${m}`)}};P.exports=a},9219:(P,v,r)=>{const g=r(9370),o=r(1743),{re:t,t:p}=r(1247),c=(l,a)=>{if(l instanceof g)return l;if(typeof l=="number"&&(l=String(l)),typeof l!="string")return null;a=a||{};let d=null;if(!a.rtl)d=l.match(t[p.COERCE]);else{let m;for(;(m=t[p.COERCERTL].exec(l))&&(!d||d.index+d[0].length!==l.length);)(!d||m.index+m[0].length!==d.index+d[0].length)&&(d=m),t[p.COERCERTL].lastIndex=m.index+m[1].length+m[2].length;t[p.COERCERTL].lastIndex=-1}return d===null?null:o(`${d[2]}.${d[3]||"0"}.${d[4]||"0"}`,a)};P.exports=c},6945:(P,v,r)=>{const g=r(9370),o=(t,p,c)=>{const l=new g(t,c),a=new g(p,c);return l.compare(a)||l.compareBuild(a)};P.exports=o},4952:(P,v,r)=>{const g=r(197),o=(t,p)=>g(t,p,!0);P.exports=o},197:(P,v,r)=>{const g=r(9370),o=(t,p,c)=>new g(t,c).compare(new g(p,c));P.exports=o},2641:(P,v,r)=>{const g=r(1743),o=r(5550),t=(p,c)=>{if(o(p,c))return null;{const l=g(p),a=g(c),d=l.prerelease.length||a.prerelease.length,m=d?"pre":"",i=d?"prerelease":"";for(const y in l)if((y==="major"||y==="minor"||y==="patch")&&l[y]!==a[y])return m+y;return i}};P.exports=t},5550:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)===0;P.exports=o},3182:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)>0;P.exports=o},2004:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)>=0;P.exports=o},3800:(P,v,r)=>{const g=r(9370),o=(t,p,c,l)=>{typeof c=="string"&&(l=c,c=void 0);try{return new g(t instanceof g?t.version:t,c).inc(p,l).version}catch(a){return null}};P.exports=o},9846:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)<0;P.exports=o},8239:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)<=0;P.exports=o},9845:(P,v,r)=>{const g=r(9370),o=(t,p)=>new g(t,p).major;P.exports=o},2398:(P,v,r)=>{const g=r(9370),o=(t,p)=>new g(t,p).minor;P.exports=o},865:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(t,p,c)!==0;P.exports=o},1743:(P,v,r)=>{const{MAX_LENGTH:g}=r(7075),{re:o,t}=r(1247),p=r(9370),c=r(1938),l=(a,d)=>{if(d=c(d),a instanceof p)return a;if(typeof a!="string"||a.length>g||!(d.loose?o[t.LOOSE]:o[t.FULL]).test(a))return null;try{return new p(a,d)}catch(i){return null}};P.exports=l},1158:(P,v,r)=>{const g=r(9370),o=(t,p)=>new g(t,p).patch;P.exports=o},7218:(P,v,r)=>{const g=r(1743),o=(t,p)=>{const c=g(t,p);return c&&c.prerelease.length?c.prerelease:null};P.exports=o},5511:(P,v,r)=>{const g=r(197),o=(t,p,c)=>g(p,t,c);P.exports=o},2438:(P,v,r)=>{const g=r(6945),o=(t,p)=>t.sort((c,l)=>g(l,c,p));P.exports=o},8289:(P,v,r)=>{const g=r(2223),o=(t,p,c)=>{try{p=new g(p,c)}catch(l){return!1}return p.test(t)};P.exports=o},6317:(P,v,r)=>{const g=r(6945),o=(t,p)=>t.sort((c,l)=>g(c,l,p));P.exports=o},6648:(P,v,r)=>{const g=r(1743),o=(t,p)=>{const c=g(t,p);return c?c.version:null};P.exports=o},3106:(P,v,r)=>{const g=r(1247);P.exports={re:g.re,src:g.src,tokens:g.t,SEMVER_SPEC_VERSION:r(7075).SEMVER_SPEC_VERSION,SemVer:r(9370),compareIdentifiers:r(5532).compareIdentifiers,rcompareIdentifiers:r(5532).rcompareIdentifiers,parse:r(1743),valid:r(6648),clean:r(4343),inc:r(3800),diff:r(2641),major:r(9845),minor:r(2398),patch:r(1158),prerelease:r(7218),compare:r(197),rcompare:r(5511),compareLoose:r(4952),compareBuild:r(6945),sort:r(6317),rsort:r(2438),gt:r(3182),lt:r(9846),eq:r(5550),neq:r(865),gte:r(2004),lte:r(8239),cmp:r(7835),coerce:r(9219),Comparator:r(2357),Range:r(2223),satisfies:r(8289),toComparators:r(2339),maxSatisfying:r(9217),minSatisfying:r(6740),minVersion:r(1154),validRange:r(3877),outside:r(5850),gtr:r(8150),ltr:r(2097),intersects:r(2798),simplifyRange:r(8850),subset:r(4367)}},7075:P=>{const v="2.0.0",g=Number.MAX_SAFE_INTEGER||9007199254740991,o=16;P.exports={SEMVER_SPEC_VERSION:v,MAX_LENGTH:256,MAX_SAFE_INTEGER:g,MAX_SAFE_COMPONENT_LENGTH:o}},1498:P=>{const v=typeof process=="object"&&process.env&&process.env.NODE_DEBUG&&/\bsemver\b/i.test(process.env.NODE_DEBUG)?(...r)=>console.error("SEMVER",...r):()=>{};P.exports=v},5532:P=>{const v=/^[0-9]+$/,r=(o,t)=>{const p=v.test(o),c=v.test(t);return p&&c&&(o=+o,t=+t),o===t?0:p&&!c?-1:c&&!p?1:o<t?-1:1},g=(o,t)=>r(t,o);P.exports={compareIdentifiers:r,rcompareIdentifiers:g}},1938:P=>{const v=["includePrerelease","loose","rtl"],r=g=>g?typeof g!="object"?{loose:!0}:v.filter(o=>g[o]).reduce((o,t)=>(o[t]=!0,o),{}):{};P.exports=r},1247:(P,v,r)=>{const{MAX_SAFE_COMPONENT_LENGTH:g}=r(7075),o=r(1498);v=P.exports={};const t=v.re=[],p=v.src=[],c=v.t={};let l=0;const a=(d,m,i)=>{const y=l++;o(d,y,m),c[d]=y,p[y]=m,t[y]=new RegExp(m,i?"g":void 0)};a("NUMERICIDENTIFIER","0|[1-9]\\d*"),a("NUMERICIDENTIFIERLOOSE","[0-9]+"),a("NONNUMERICIDENTIFIER","\\d*[a-zA-Z-][a-zA-Z0-9-]*"),a("MAINVERSION",`(${p[c.NUMERICIDENTIFIER]})\\.(${p[c.NUMERICIDENTIFIER]})\\.(${p[c.NUMERICIDENTIFIER]})`),a("MAINVERSIONLOOSE",`(${p[c.NUMERICIDENTIFIERLOOSE]})\\.(${p[c.NUMERICIDENTIFIERLOOSE]})\\.(${p[c.NUMERICIDENTIFIERLOOSE]})`),a("PRERELEASEIDENTIFIER",`(?:${p[c.NUMERICIDENTIFIER]}|${p[c.NONNUMERICIDENTIFIER]})`),a("PRERELEASEIDENTIFIERLOOSE",`(?:${p[c.NUMERICIDENTIFIERLOOSE]}|${p[c.NONNUMERICIDENTIFIER]})`),a("PRERELEASE",`(?:-(${p[c.PRERELEASEIDENTIFIER]}(?:\\.${p[c.PRERELEASEIDENTIFIER]})*))`),a("PRERELEASELOOSE",`(?:-?(${p[c.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${p[c.PRERELEASEIDENTIFIERLOOSE]})*))`),a("BUILDIDENTIFIER","[0-9A-Za-z-]+"),a("BUILD",`(?:\\+(${p[c.BUILDIDENTIFIER]}(?:\\.${p[c.BUILDIDENTIFIER]})*))`),a("FULLPLAIN",`v?${p[c.MAINVERSION]}${p[c.PRERELEASE]}?${p[c.BUILD]}?`),a("FULL",`^${p[c.FULLPLAIN]}$`),a("LOOSEPLAIN",`[v=\\s]*${p[c.MAINVERSIONLOOSE]}${p[c.PRERELEASELOOSE]}?${p[c.BUILD]}?`),a("LOOSE",`^${p[c.LOOSEPLAIN]}$`),a("GTLT","((?:<|>)?=?)"),a("XRANGEIDENTIFIERLOOSE",`${p[c.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`),a("XRANGEIDENTIFIER",`${p[c.NUMERICIDENTIFIER]}|x|X|\\*`),a("XRANGEPLAIN",`[v=\\s]*(${p[c.XRANGEIDENTIFIER]})(?:\\.(${p[c.XRANGEIDENTIFIER]})(?:\\.(${p[c.XRANGEIDENTIFIER]})(?:${p[c.PRERELEASE]})?${p[c.BUILD]}?)?)?`),a("XRANGEPLAINLOOSE",`[v=\\s]*(${p[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${p[c.XRANGEIDENTIFIERLOOSE]})(?:\\.(${p[c.XRANGEIDENTIFIERLOOSE]})(?:${p[c.PRERELEASELOOSE]})?${p[c.BUILD]}?)?)?`),a("XRANGE",`^${p[c.GTLT]}\\s*${p[c.XRANGEPLAIN]}$`),a("XRANGELOOSE",`^${p[c.GTLT]}\\s*${p[c.XRANGEPLAINLOOSE]}$`),a("COERCE",`(^|[^\\d])(\\d{1,${g}})(?:\\.(\\d{1,${g}}))?(?:\\.(\\d{1,${g}}))?(?:$|[^\\d])`),a("COERCERTL",p[c.COERCE],!0),a("LONETILDE","(?:~>?)"),a("TILDETRIM",`(\\s*)${p[c.LONETILDE]}\\s+`,!0),v.tildeTrimReplace="$1~",a("TILDE",`^${p[c.LONETILDE]}${p[c.XRANGEPLAIN]}$`),a("TILDELOOSE",`^${p[c.LONETILDE]}${p[c.XRANGEPLAINLOOSE]}$`),a("LONECARET","(?:\\^)"),a("CARETTRIM",`(\\s*)${p[c.LONECARET]}\\s+`,!0),v.caretTrimReplace="$1^",a("CARET",`^${p[c.LONECARET]}${p[c.XRANGEPLAIN]}$`),a("CARETLOOSE",`^${p[c.LONECARET]}${p[c.XRANGEPLAINLOOSE]}$`),a("COMPARATORLOOSE",`^${p[c.GTLT]}\\s*(${p[c.LOOSEPLAIN]})$|^$`),a("COMPARATOR",`^${p[c.GTLT]}\\s*(${p[c.FULLPLAIN]})$|^$`),a("COMPARATORTRIM",`(\\s*)${p[c.GTLT]}\\s*(${p[c.LOOSEPLAIN]}|${p[c.XRANGEPLAIN]})`,!0),v.comparatorTrimReplace="$1$2$3",a("HYPHENRANGE",`^\\s*(${p[c.XRANGEPLAIN]})\\s+-\\s+(${p[c.XRANGEPLAIN]})\\s*$`),a("HYPHENRANGELOOSE",`^\\s*(${p[c.XRANGEPLAINLOOSE]})\\s+-\\s+(${p[c.XRANGEPLAINLOOSE]})\\s*$`),a("STAR","(<|>)?=?\\s*\\*"),a("GTE0","^\\s*>=\\s*0\\.0\\.0\\s*$"),a("GTE0PRE","^\\s*>=\\s*0\\.0\\.0-0\\s*$")},8150:(P,v,r)=>{const g=r(5850),o=(t,p,c)=>g(t,p,">",c);P.exports=o},2798:(P,v,r)=>{const g=r(2223),o=(t,p,c)=>(t=new g(t,c),p=new g(p,c),t.intersects(p));P.exports=o},2097:(P,v,r)=>{const g=r(5850),o=(t,p,c)=>g(t,p,"<",c);P.exports=o},9217:(P,v,r)=>{const g=r(9370),o=r(2223),t=(p,c,l)=>{let a=null,d=null,m=null;try{m=new o(c,l)}catch(i){return null}return p.forEach(i=>{m.test(i)&&(!a||d.compare(i)===-1)&&(a=i,d=new g(a,l))}),a};P.exports=t},6740:(P,v,r)=>{const g=r(9370),o=r(2223),t=(p,c,l)=>{let a=null,d=null,m=null;try{m=new o(c,l)}catch(i){return null}return p.forEach(i=>{m.test(i)&&(!a||d.compare(i)===1)&&(a=i,d=new g(a,l))}),a};P.exports=t},1154:(P,v,r)=>{const g=r(9370),o=r(2223),t=r(3182),p=(c,l)=>{c=new o(c,l);let a=new g("0.0.0");if(c.test(a)||(a=new g("0.0.0-0"),c.test(a)))return a;a=null;for(let d=0;d<c.set.length;++d){const m=c.set[d];let i=null;m.forEach(y=>{const u=new g(y.semver.version);switch(y.operator){case">":u.prerelease.length===0?u.patch++:u.prerelease.push(0),u.raw=u.format();case"":case">=":(!i||t(u,i))&&(i=u);break;case"<":case"<=":break;default:throw new Error(`Unexpected operation: ${y.operator}`)}}),i&&(!a||t(a,i))&&(a=i)}return a&&c.test(a)?a:null};P.exports=p},5850:(P,v,r)=>{const g=r(9370),o=r(2357),{ANY:t}=o,p=r(2223),c=r(8289),l=r(3182),a=r(9846),d=r(8239),m=r(2004),i=(y,u,f,S)=>{y=new g(y,S),u=new p(u,S);let h,C,O,E,R;switch(f){case">":h=l,C=d,O=a,E=">",R=">=";break;case"<":h=a,C=m,O=l,E="<",R="<=";break;default:throw new TypeError('Must provide a hilo val of "<" or ">"')}if(c(y,u,S))return!1;for(let T=0;T<u.set.length;++T){const N=u.set[T];let M=null,D=null;if(N.forEach(x=>{x.semver===t&&(x=new o(">=0.0.0")),M=M||x,D=D||x,h(x.semver,M.semver,S)?M=x:O(x.semver,D.semver,S)&&(D=x)}),M.operator===E||M.operator===R||(!D.operator||D.operator===E)&&C(y,D.semver))return!1;if(D.operator===R&&O(y,D.semver))return!1}return!0};P.exports=i},8850:(P,v,r)=>{const g=r(8289),o=r(197);P.exports=(t,p,c)=>{const l=[];let a=null,d=null;const m=t.sort((f,S)=>o(f,S,c));for(const f of m)g(f,p,c)?(d=f,a||(a=f)):(d&&l.push([a,d]),d=null,a=null);a&&l.push([a,null]);const i=[];for(const[f,S]of l)f===S?i.push(f):!S&&f===m[0]?i.push("*"):S?f===m[0]?i.push(`<=${S}`):i.push(`${f} - ${S}`):i.push(`>=${f}`);const y=i.join(" || "),u=typeof p.raw=="string"?p.raw:String(p);return y.length<u.length?y:p}},4367:(P,v,r)=>{const g=r(2223),o=r(2357),{ANY:t}=o,p=r(8289),c=r(197),l=(i,y,u={})=>{if(i===y)return!0;i=new g(i,u),y=new g(y,u);let f=!1;e:for(const S of i.set){for(const h of y.set){const C=a(S,h,u);if(f=f||C!==null,C)continue e}if(f)return!1}return!0},a=(i,y,u)=>{if(i===y)return!0;if(i.length===1&&i[0].semver===t){if(y.length===1&&y[0].semver===t)return!0;u.includePrerelease?i=[new o(">=0.0.0-0")]:i=[new o(">=0.0.0")]}if(y.length===1&&y[0].semver===t){if(u.includePrerelease)return!0;y=[new o(">=0.0.0")]}const f=new Set;let S,h;for(const D of i)D.operator===">"||D.operator===">="?S=d(S,D,u):D.operator==="<"||D.operator==="<="?h=m(h,D,u):f.add(D.semver);if(f.size>1)return null;let C;if(S&&h){if(C=c(S.semver,h.semver,u),C>0)return null;if(C===0&&(S.operator!==">="||h.operator!=="<="))return null}for(const D of f){if(S&&!p(D,String(S),u)||h&&!p(D,String(h),u))return null;for(const x of y)if(!p(D,String(x),u))return!1;return!0}let O,E,R,T,N=h&&!u.includePrerelease&&h.semver.prerelease.length?h.semver:!1,M=S&&!u.includePrerelease&&S.semver.prerelease.length?S.semver:!1;N&&N.prerelease.length===1&&h.operator==="<"&&N.prerelease[0]===0&&(N=!1);for(const D of y){if(T=T||D.operator===">"||D.operator===">=",R=R||D.operator==="<"||D.operator==="<=",S){if(M&&D.semver.prerelease&&D.semver.prerelease.length&&D.semver.major===M.major&&D.semver.minor===M.minor&&D.semver.patch===M.patch&&(M=!1),D.operator===">"||D.operator===">="){if(O=d(S,D,u),O===D&&O!==S)return!1}else if(S.operator===">="&&!p(S.semver,String(D),u))return!1}if(h){if(N&&D.semver.prerelease&&D.semver.prerelease.length&&D.semver.major===N.major&&D.semver.minor===N.minor&&D.semver.patch===N.patch&&(N=!1),D.operator==="<"||D.operator==="<="){if(E=m(h,D,u),E===D&&E!==h)return!1}else if(h.operator==="<="&&!p(h.semver,String(D),u))return!1}if(!D.operator&&(h||S)&&C!==0)return!1}return!(S&&R&&!h&&C!==0||h&&T&&!S&&C!==0||M||N)},d=(i,y,u)=>{if(!i)return y;const f=c(i.semver,y.semver,u);return f>0?i:f<0||y.operator===">"&&i.operator===">="?y:i},m=(i,y,u)=>{if(!i)return y;const f=c(i.semver,y.semver,u);return f<0?i:f>0||y.operator==="<"&&i.operator==="<="?y:i};P.exports=l},2339:(P,v,r)=>{const g=r(2223),o=(t,p)=>new g(t,p).set.map(c=>c.map(l=>l.value).join(" ").trim().split(" "));P.exports=o},3877:(P,v,r)=>{const g=r(2223),o=(t,p)=>{try{return new g(t,p).range||"*"}catch(c){return null}};P.exports=o},1315:P=>{"use strict";P.exports=function(v){v.prototype[Symbol.iterator]=function*(){for(let r=this.head;r;r=r.next)yield r.value}}},3870:(P,v,r)=>{"use strict";P.exports=g,g.Node=c,g.create=g;function g(l){var a=this;if(a instanceof g||(a=new g),a.tail=null,a.head=null,a.length=0,l&&typeof l.forEach=="function")l.forEach(function(i){a.push(i)});else if(arguments.length>0)for(var d=0,m=arguments.length;d<m;d++)a.push(arguments[d]);return a}g.prototype.removeNode=function(l){if(l.list!==this)throw new Error("removing node which does not belong to this list");var a=l.next,d=l.prev;return a&&(a.prev=d),d&&(d.next=a),l===this.head&&(this.head=a),l===this.tail&&(this.tail=d),l.list.length--,l.next=null,l.prev=null,l.list=null,a},g.prototype.unshiftNode=function(l){if(l!==this.head){l.list&&l.list.removeNode(l);var a=this.head;l.list=this,l.next=a,a&&(a.prev=l),this.head=l,this.tail||(this.tail=l),this.length++}},g.prototype.pushNode=function(l){if(l!==this.tail){l.list&&l.list.removeNode(l);var a=this.tail;l.list=this,l.prev=a,a&&(a.next=l),this.tail=l,this.head||(this.head=l),this.length++}},g.prototype.push=function(){for(var l=0,a=arguments.length;l<a;l++)t(this,arguments[l]);return this.length},g.prototype.unshift=function(){for(var l=0,a=arguments.length;l<a;l++)p(this,arguments[l]);return this.length},g.prototype.pop=function(){if(!!this.tail){var l=this.tail.value;return this.tail=this.tail.prev,this.tail?this.tail.next=null:this.head=null,this.length--,l}},g.prototype.shift=function(){if(!!this.head){var l=this.head.value;return this.head=this.head.next,this.head?this.head.prev=null:this.tail=null,this.length--,l}},g.prototype.forEach=function(l,a){a=a||this;for(var d=this.head,m=0;d!==null;m++)l.call(a,d.value,m,this),d=d.next},g.prototype.forEachReverse=function(l,a){a=a||this;for(var d=this.tail,m=this.length-1;d!==null;m--)l.call(a,d.value,m,this),d=d.prev},g.prototype.get=function(l){for(var a=0,d=this.head;d!==null&&a<l;a++)d=d.next;if(a===l&&d!==null)return d.value},g.prototype.getReverse=function(l){for(var a=0,d=this.tail;d!==null&&a<l;a++)d=d.prev;if(a===l&&d!==null)return d.value},g.prototype.map=function(l,a){a=a||this;for(var d=new g,m=this.head;m!==null;)d.push(l.call(a,m.value,this)),m=m.next;return d},g.prototype.mapReverse=function(l,a){a=a||this;for(var d=new g,m=this.tail;m!==null;)d.push(l.call(a,m.value,this)),m=m.prev;return d},g.prototype.reduce=function(l,a){var d,m=this.head;if(arguments.length>1)d=a;else if(this.head)m=this.head.next,d=this.head.value;else throw new TypeError("Reduce of empty list with no initial value");for(var i=0;m!==null;i++)d=l(d,m.value,i),m=m.next;return d},g.prototype.reduceReverse=function(l,a){var d,m=this.tail;if(arguments.length>1)d=a;else if(this.tail)m=this.tail.prev,d=this.tail.value;else throw new TypeError("Reduce of empty list with no initial value");for(var i=this.length-1;m!==null;i--)d=l(d,m.value,i),m=m.prev;return d},g.prototype.toArray=function(){for(var l=new Array(this.length),a=0,d=this.head;d!==null;a++)l[a]=d.value,d=d.next;return l},g.prototype.toArrayReverse=function(){for(var l=new Array(this.length),a=0,d=this.tail;d!==null;a++)l[a]=d.value,d=d.prev;return l},g.prototype.slice=function(l,a){a=a||this.length,a<0&&(a+=this.length),l=l||0,l<0&&(l+=this.length);var d=new g;if(a<l||a<0)return d;l<0&&(l=0),a>this.length&&(a=this.length);for(var m=0,i=this.head;i!==null&&m<l;m++)i=i.next;for(;i!==null&&m<a;m++,i=i.next)d.push(i.value);return d},g.prototype.sliceReverse=function(l,a){a=a||this.length,a<0&&(a+=this.length),l=l||0,l<0&&(l+=this.length);var d=new g;if(a<l||a<0)return d;l<0&&(l=0),a>this.length&&(a=this.length);for(var m=this.length,i=this.tail;i!==null&&m>a;m--)i=i.prev;for(;i!==null&&m>l;m--,i=i.prev)d.push(i.value);return d},g.prototype.splice=function(l,a,...d){l>this.length&&(l=this.length-1),l<0&&(l=this.length+l);for(var m=0,i=this.head;i!==null&&m<l;m++)i=i.next;for(var y=[],m=0;i&&m<a;m++)y.push(i.value),i=this.removeNode(i);i===null&&(i=this.tail),i!==this.head&&i!==this.tail&&(i=i.prev);for(var m=0;m<d.length;m++)i=o(this,i,d[m]);return y},g.prototype.reverse=function(){for(var l=this.head,a=this.tail,d=l;d!==null;d=d.prev){var m=d.prev;d.prev=d.next,d.next=m}return this.head=a,this.tail=l,this};function o(l,a,d){var m=a===l.head?new c(d,null,a,l):new c(d,a,a.next,l);return m.next===null&&(l.tail=m),m.prev===null&&(l.head=m),l.length++,m}function t(l,a){l.tail=new c(a,l.tail,null,l),l.head||(l.head=l.tail),l.length++}function p(l,a){l.head=new c(a,null,l.head,l),l.tail||(l.tail=l.head),l.length++}function c(l,a,d,m){if(!(this instanceof c))return new c(l,a,d,m);this.list=m,this.value=l,a?(a.next=this,this.prev=a):this.prev=null,d?(d.prev=this,this.next=d):this.next=null}try{r(1315)(g)}catch(l){}}},Pa={};function on(P){var v=Pa[P];if(v!==void 0)return v.exports;var r=Pa[P]={id:P,loaded:!1,exports:{}};return Zs[P].call(r.exports,r,r.exports,on),r.loaded=!0,r.exports}on.n=P=>{var v=P&&P.__esModule?()=>P.default:()=>P;return on.d(v,{a:v}),v},on.d=(P,v)=>{for(var r in v)on.o(v,r)&&!on.o(P,r)&&Object.defineProperty(P,r,{enumerable:!0,get:v[r]})},on.g=function(){if(typeof globalThis=="object")return globalThis;try{return this||new Function("return this")()}catch(P){if(typeof window=="object")return window}}(),on.o=(P,v)=>Object.prototype.hasOwnProperty.call(P,v),on.nmd=P=>(P.paths=[],P.children||(P.children=[]),P);var rm={};(()=>{var Bn;"use strict";var P=on(4595),v=on.n(P),r=on(7584),g=on(3106),o=on.n(g),t=on(5075),p=on.n(t),c=on(5807),l=on(1545),a=on(7289),d=on(4374),m=on(8181),i=on(9108),y=on.n(i),u=on(6914),f=on(3570),S=on(2371),h=on(6925);class C{hydrate(pe,Re){const Ae=new URL(pe,typeof window=="undefined"?"https://dummy.base":window.location.origin),ie={};Ae.pathname.split("/").forEach((he,ye)=>{if(he.charAt(0)===":"){const Ce=he.slice(1);typeof Re[Ce]!="undefined"&&(Ae.pathname=Ae.pathname.replace(he,encodeURIComponent(Re[Ce])),ie[Ce]=Re[Ce])}});for(const he in Re)(typeof ie[he]=="undefined"||Ae.searchParams.has(he))&&Ae.searchParams.set(he,Re[he]);return Ae.toString()}}function O(){v()(".sample-request-send").off("click"),v()(".sample-request-send").on("click",function(Fe){Fe.preventDefault();const pe=v()(this).parents("article"),Re=pe.data("group"),Ae=pe.data("name"),ie=pe.data("version");N(Re,Ae,ie,v()(this).data("type"))}),v()(".sample-request-clear").off("click"),v()(".sample-request-clear").on("click",function(Fe){Fe.preventDefault();const pe=v()(this).parents("article"),Re=pe.data("group"),Ae=pe.data("name"),ie=pe.data("version");M(Re,Ae,ie)})}function E(Fe){return Fe.replace(/{(.+?)}/g,":$1")}function R(Fe,pe){const Re=Fe.find(".sample-request-url").val(),Ae=new C,ie=E(Re);return Ae.hydrate(ie,pe)}function T(Fe){const pe={};["header","query","body"].forEach(Ae=>{const ie={};try{Fe.find(v()(`[data-family="${Ae}"]:visible`)).each((he,ye)=>{const Ce=ye.dataset.name;let Ze=ye.value;if(ye.type==="checkbox")if(ye.checked)Ze="on";else return!0;if(!Ze&&!ye.dataset.optional&&ye.type!=="checkbox")return v()(ye).addClass("border-danger"),!0;ie[Ce]=Ze})}catch(he){return}pe[Ae]=ie});const Re=Fe.find(v()('[data-family="body-json"]'));return Re.is(":visible")?(pe.body=Re.val(),pe.header["Content-Type"]="application/json"):pe.header["Content-Type"]="multipart/form-data",pe}function N(Fe,pe,Re,Ae){const ie=v()(`article[data-group="${Fe}"][data-name="${pe}"][data-version="${Re}"]`),he=T(ie),ye={};if(ye.url=R(ie,he.query),ye.headers=he.header,ye.headers["Content-Type"]==="application/json")ye.data=he.body;else if(ye.headers["Content-Type"]==="multipart/form-data"){const Ke=new FormData;for(const[Je,Oe]of Object.entries(he.body))Ke.append(Je,Oe);ye.data=Ke,ye.processData=!1,(Ae==="get"||Ae==="delete")&&delete ye.headers["Content-Type"]}ye.type=Ae,ye.success=Ce,ye.error=Ze,v().ajax(ye),ie.find(".sample-request-response").fadeTo(200,1),ie.find(".sample-request-response-json").html("Loading...");function Ce(Ke,Je,Oe){let Ge;try{Ge=JSON.parse(Oe.responseText),Ge=JSON.stringify(Ge,null,4)}catch(Qe){Ge=Oe.responseText}ie.find(".sample-request-response-json").text(Ge),y().highlightAll()}function Ze(Ke,Je,Oe){let Ge="Error "+Ke.status+": "+Oe,Qe;try{Qe=JSON.parse(Ke.responseText),Qe=JSON.stringify(Qe,null,4)}catch(Xe){Qe=Ke.responseText}Qe&&(Ge+=`
 `+Qe),ie.find(".sample-request-response").is(":visible")&&ie.find(".sample-request-response").fadeTo(1,.1),ie.find(".sample-request-response").fadeTo(250,1),ie.find(".sample-request-response-json").text(Ge),y().highlightAll()}}function M(Fe,pe,Re){const Ae=v()('article[data-group="'+Fe+'"][data-name="'+pe+'"][data-version="'+Re+'"]');Ae.find(".sample-request-response-json").html(""),Ae.find(".sample-request-response").hide(),Ae.find(".sample-request-input").each((he,ye)=>{ye.value=ye.placeholder!==ye.dataset.name?ye.placeholder:""});const ie=Ae.find(".sample-request-url");ie.val(ie.prop("defaultValue"))}const ce={ca:{"Allowed values:":"Valors permesos:","Compare all with predecessor":"Comparar tot amb versi\xF3 anterior","compare changes to:":"comparar canvis amb:","compared to":"comparat amb","Default value:":"Valor per defecte:",Description:"Descripci\xF3",Field:"Camp",General:"General","Generated with":"Generat amb",Name:"Nom","No response values.":"Sense valors en la resposta.",optional:"opcional",Parameter:"Par\xE0metre","Permission:":"Permisos:",Response:"Resposta",Send:"Enviar","Send a Sample Request":"Enviar una petici\xF3 d'exemple","show up to version:":"mostrar versi\xF3:","Size range:":"Tamany de rang:",Type:"Tipus",url:"url"},cs:{"Allowed values:":"Povolen\xE9 hodnoty:","Compare all with predecessor":"Porovnat v\u0161e s p\u0159edchoz\xEDmi verzemi","compare changes to:":"porovnat zm\u011Bny s:","compared to":"porovnat s","Default value:":"V\xFDchoz\xED hodnota:",Description:"Popis",Field:"Pole",General:"Obecn\xE9","Generated with":"Vygenerov\xE1no pomoc\xED",Name:"N\xE1zev","No response values.":"Nebyly vr\xE1ceny \u017E\xE1dn\xE9 hodnoty.",optional:"voliteln\xE9",Parameter:"Parametr","Permission:":"Opr\xE1vn\u011Bn\xED:",Response:"Odpov\u011B\u010F",Send:"Odeslat","Send a Sample Request":"Odeslat uk\xE1zkov\xFD po\u017Eadavek","show up to version:":"zobrazit po verzi:","Size range:":"Rozsah velikosti:",Type:"Typ",url:"url"},de:{"Allowed values:":"Erlaubte Werte:","Compare all with predecessor":"Vergleiche alle mit ihren Vorg\xE4ngern","compare changes to:":"vergleiche \xC4nderungen mit:","compared to":"verglichen mit","Default value:":"Standardwert:",Description:"Beschreibung",Field:"Feld",General:"Allgemein","Generated with":"Erstellt mit",Name:"Name","No response values.":"Keine R\xFCckgabewerte.",optional:"optional",Parameter:"Parameter","Permission:":"Berechtigung:",Response:"Antwort",Send:"Senden","Send a Sample Request":"Eine Beispielanfrage senden","show up to version:":"zeige bis zur Version:","Size range:":"Gr\xF6\xDFenbereich:",Type:"Typ",url:"url"},es:{"Allowed values:":"Valores permitidos:","Compare all with predecessor":"Comparar todo con versi\xF3n anterior","compare changes to:":"comparar cambios con:","compared to":"comparado con","Default value:":"Valor por defecto:",Description:"Descripci\xF3n",Field:"Campo",General:"General","Generated with":"Generado con",Name:"Nombre","No response values.":"Sin valores en la respuesta.",optional:"opcional",Parameter:"Par\xE1metro","Permission:":"Permisos:",Response:"Respuesta",Send:"Enviar","Send a Sample Request":"Enviar una petici\xF3n de ejemplo","show up to version:":"mostrar a versi\xF3n:","Size range:":"Tama\xF1o de rango:",Type:"Tipo",url:"url"},en:{},fr:{"Allowed values:":"Valeurs autoris\xE9es :",Body:"Corps","Compare all with predecessor":"Tout comparer avec ...","compare changes to:":"comparer les changements \xE0 :","compared to":"comparer \xE0","Default value:":"Valeur par d\xE9faut :",Description:"Description",Field:"Champ",General:"G\xE9n\xE9ral","Generated with":"G\xE9n\xE9r\xE9 avec",Header:"En-t\xEAte",Headers:"En-t\xEAtes",Name:"Nom","No response values.":"Aucune valeur de r\xE9ponse.","No value":"Aucune valeur",optional:"optionnel",Parameter:"Param\xE8tre",Parameters:"Param\xE8tres","Permission:":"Permission :","Query Parameter(s)":"Param\xE8tre(s) de la requ\xEAte","Query Parameters":"Param\xE8tres de la requ\xEAte","Request Body":"Corps de la requ\xEAte",required:"requis",Response:"R\xE9ponse",Send:"Envoyer","Send a Sample Request":"Envoyer une requ\xEAte repr\xE9sentative","show up to version:":"Montrer \xE0 partir de la version :","Size range:":"Ordre de grandeur :",Type:"Type",url:"url"},it:{"Allowed values:":"Valori permessi:","Compare all with predecessor":"Confronta tutto con versioni precedenti","compare changes to:":"confronta modifiche con:","compared to":"confrontato con","Default value:":"Valore predefinito:",Description:"Descrizione",Field:"Campo",General:"Generale","Generated with":"Creato con",Name:"Nome","No response values.":"Nessun valore di risposta.",optional:"opzionale",Parameter:"Parametro","Permission:":"Permessi:",Response:"Risposta",Send:"Invia","Send a Sample Request":"Invia una richiesta di esempio","show up to version:":"mostra alla versione:","Size range:":"Intervallo dimensione:",Type:"Tipo",url:"url"},nl:{"Allowed values:":"Toegestane waarden:","Compare all with predecessor":"Vergelijk alle met voorgaande versie","compare changes to:":"vergelijk veranderingen met:","compared to":"vergelijk met","Default value:":"Standaard waarde:",Description:"Omschrijving",Field:"Veld",General:"Algemeen","Generated with":"Gegenereerd met",Name:"Naam","No response values.":"Geen response waardes.",optional:"optioneel",Parameter:"Parameter","Permission:":"Permissie:",Response:"Antwoorden",Send:"Sturen","Send a Sample Request":"Stuur een sample aanvragen","show up to version:":"toon tot en met versie:","Size range:":"Maatbereik:",Type:"Type",url:"url"},pl:{"Allowed values:":"Dozwolone warto\u015Bci:","Compare all with predecessor":"Por\xF3wnaj z poprzednimi wersjami","compare changes to:":"por\xF3wnaj zmiany do:","compared to":"por\xF3wnaj do:","Default value:":"Warto\u015B\u0107 domy\u015Blna:",Description:"Opis",Field:"Pole",General:"Generalnie","Generated with":"Wygenerowano z",Name:"Nazwa","No response values.":"Brak odpowiedzi.",optional:"opcjonalny",Parameter:"Parametr","Permission:":"Uprawnienia:",Response:"Odpowied\u017A",Send:"Wy\u015Blij","Send a Sample Request":"Wy\u015Blij przyk\u0142adowe \u017C\u0105danie","show up to version:":"poka\u017C do wersji:","Size range:":"Zakres rozmiaru:",Type:"Typ",url:"url"},pt:{"Allowed values:":"Valores permitidos:","Compare all with predecessor":"Compare todos com antecessores","compare changes to:":"comparar altera\xE7\xF5es com:","compared to":"comparado com","Default value:":"Valor padr\xE3o:",Description:"Descri\xE7\xE3o",Field:"Campo",General:"Geral","Generated with":"Gerado com",Name:"Nome","No response values.":"Sem valores de resposta.",optional:"opcional",Parameter:"Par\xE2metro","Permission:":"Permiss\xE3o:",Response:"Resposta",Send:"Enviar","Send a Sample Request":"Enviar um Exemplo de Pedido","show up to version:":"aparecer para a vers\xE3o:","Size range:":"Faixa de tamanho:",Type:"Tipo",url:"url"},ro:{"Allowed values:":"Valori permise:","Compare all with predecessor":"Compar\u0103 toate cu versiunea precedent\u0103","compare changes to:":"compar\u0103 cu versiunea:","compared to":"comparat cu","Default value:":"Valoare implicit\u0103:",Description:"Descriere",Field:"C\xE2mp",General:"General","Generated with":"Generat cu",Name:"Nume","No response values.":"Nici o valoare returnat\u0103.",optional:"op\u021Bional",Parameter:"Parametru","Permission:":"Permisiune:",Response:"R\u0103spuns",Send:"Trimite","Send a Sample Request":"Trimite o cerere de prob\u0103","show up to version:":"arat\u0103 p\xE2n\u0103 la versiunea:","Size range:":"Interval permis:",Type:"Tip",url:"url"},ru:{"Allowed values:":"\u0414\u043E\u043F\u0443\u0441\u0442\u0438\u043C\u044B\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F:","Compare all with predecessor":"\u0421\u0440\u0430\u0432\u043D\u0438\u0442\u044C \u0441 \u043F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0435\u0439 \u0432\u0435\u0440\u0441\u0438\u0435\u0439","compare changes to:":"\u0441\u0440\u0430\u0432\u043D\u0438\u0442\u044C \u0441:","compared to":"\u0432 \u0441\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u0438 \u0441","Default value:":"\u041F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E:",Description:"\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435",Field:"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435",General:"\u041E\u0431\u0449\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F","Generated with":"\u0421\u0433\u0435\u043D\u0435\u0440\u0438\u0440\u043E\u0432\u0430\u043D\u043E \u0441 \u043F\u043E\u043C\u043E\u0449\u044C\u044E",Name:"\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435","No response values.":"\u041D\u0435\u0442 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0439 \u0434\u043B\u044F \u043E\u0442\u0432\u0435\u0442\u0430.",optional:"\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u0439",Parameter:"\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440","Permission:":"\u0420\u0430\u0437\u0440\u0435\u0448\u0435\u043D\u043E:",Response:"\u041E\u0442\u0432\u0435\u0442",Send:"\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C","Send a Sample Request":"\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u0442\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0437\u0430\u043F\u0440\u043E\u0441","show up to version:":"\u043F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0432\u0435\u0440\u0441\u0438\u044E:","Size range:":"\u041E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u044F:",Type:"\u0422\u0438\u043F",url:"URL"},tr:{"Allowed values:":"\u0130zin verilen de\u011Ferler:","Compare all with predecessor":"T\xFCm\xFCn\xFC \xF6ncekiler ile kar\u015F\u0131la\u015Ft\u0131r","compare changes to:":"de\u011Fi\u015Fiklikleri kar\u015F\u0131la\u015Ft\u0131r:","compared to":"kar\u015F\u0131la\u015Ft\u0131r","Default value:":"Varsay\u0131lan de\u011Fer:",Description:"A\xE7\u0131klama",Field:"Alan",General:"Genel","Generated with":"Olu\u015Fturan",Name:"\u0130sim","No response values.":"D\xF6n\xFC\u015F verisi yok.",optional:"opsiyonel",Parameter:"Parametre","Permission:":"\u0130zin:",Response:"D\xF6n\xFC\u015F",Send:"G\xF6nder","Send a Sample Request":"\xD6rnek istek g\xF6nder","show up to version:":"bu versiyona kadar g\xF6ster:","Size range:":"Boyut aral\u0131\u011F\u0131:",Type:"Tip",url:"url"},vi:{"Allowed values:":"Gi\xE1 tr\u1ECB ch\u1EA5p nh\u1EADn:","Compare all with predecessor":"So s\xE1nh v\u1EDBi t\u1EA5t c\u1EA3 phi\xEAn b\u1EA3n tr\u01B0\u1EDBc","compare changes to:":"so s\xE1nh s\u1EF1 thay \u0111\u1ED5i v\u1EDBi:","compared to":"so s\xE1nh v\u1EDBi","Default value:":"Gi\xE1 tr\u1ECB m\u1EB7c \u0111\u1ECBnh:",Description:"Ch\xFA th\xEDch",Field:"Tr\u01B0\u1EDDng d\u1EEF li\u1EC7u",General:"T\u1ED5ng quan","Generated with":"\u0110\u01B0\u1EE3c t\u1EA1o b\u1EDFi",Name:"T\xEAn","No response values.":"Kh\xF4ng c\xF3 k\u1EBFt qu\u1EA3 tr\u1EA3 v\u1EC1.",optional:"T\xF9y ch\u1ECDn",Parameter:"Tham s\u1ED1","Permission:":"Quy\u1EC1n h\u1EA1n:",Response:"K\u1EBFt qu\u1EA3",Send:"G\u1EEDi","Send a Sample Request":"G\u1EEDi m\u1ED9t y\xEAu c\u1EA7u m\u1EABu","show up to version:":"hi\u1EC3n th\u1ECB phi\xEAn b\u1EA3n:","Size range:":"K\xEDch c\u1EE1:",Type:"Ki\u1EC3u",url:"li\xEAn k\u1EBFt"},zh:{"Allowed values:":"\u5141\u8BB8\u503C:",Body:"\u8BF7\u6C42\u4F53","Compare all with predecessor":"\u4E0E\u6240\u6709\u4E4B\u524D\u7684\u7248\u672C\u6BD4\u8F83","compare changes to:":"\u5C06\u5F53\u524D\u7248\u672C\u4E0E\u6307\u5B9A\u7248\u672C\u6BD4\u8F83:","compared to":"\u76F8\u6BD4\u4E8E","Default value:":"\u9ED8\u8BA4\u503C:",Description:"\u63CF\u8FF0",Field:"\u5B57\u6BB5",General:"\u6982\u8981","Generated with":"\u6784\u5EFA\u4E8E",Name:"\u540D\u79F0","No response values.":"\u65E0\u8FD4\u56DE\u503C.",optional:"\u53EF\u9009",Parameter:"\u53C2\u6570",Parameters:"\u53C2\u6570",Headers:"\u8BF7\u6C42\u5934","Permission:":"\u6743\u9650:",Response:"\u8FD4\u56DE",required:"\u5FC5\u9700\u7684",Send:"\u53D1\u9001","Send a Sample Request":"\u53D1\u9001\u793A\u4F8B\u8BF7\u6C42","show up to version:":"\u663E\u793A\u6307\u5B9A\u7248\u672C:","Size range:":"\u53D6\u503C\u8303\u56F4:",Type:"\u7C7B\u578B",url:"\u5730\u5740"}},ne=((Bn=window.navigator.language)!=null?Bn:"en-GB").toLowerCase().substr(0,2);let ge=ce[ne]?ce[ne]:ce.en;function be(Fe){const pe=ge[Fe];return pe===void 0?Fe:pe}function Le(Fe){ge=ce[Fe]}const{defaultsDeep:an}=r,yn=(Fe,pe)=>{const Re=(Ae,ie,he,ye)=>({[ie]:he+1<ye.length?Ae:pe});return Fe.reduceRight(Re,{})},fn=Fe=>{let pe={};return Fe.forEach(Re=>{const Ae=yn(Re[0].split("."),Re[1]);pe=an(pe,Ae)}),hn(pe)};function hn(Fe){return JSON.stringify(Fe,null,4)}function Rn(Fe){const pe=[];return Fe.forEach(Re=>{let Ae;switch(Re.type.toLowerCase()){case"string":Ae=Re.defaultValue||"";break;case"boolean":Ae=Boolean(Re.defaultValue)||!1;break;case"number":Ae=parseInt(Re.defaultValue||0,10);break;case"date":Ae=Re.defaultValue||new Date().toLocaleDateString(window.navigator.language);break}pe.push([Re.field,Ae])}),fn(pe)}var Me=on(8317);class En extends Me{constructor(pe){super(),this.testMode=pe}diffMain(pe,Re,Ae,ie){return super.diff_main(this._stripHtml(pe),this._stripHtml(Re),Ae,ie)}diffPrettyHtml(pe){const Re=[],Ae=/&/g,ie=/</g,he=/>/g,ye=/\n/g;for(let Ce=0;Ce<pe.length;Ce++){const Ze=pe[Ce][0],Je=pe[Ce][1].replace(Ae,"&amp;").replace(ie,"&lt;").replace(he,"&gt;").replace(ye,"&para;<br>");switch(Ze){case Me.DIFF_INSERT:Re[Ce]="<ins>"+Je+"</ins>";break;case Me.DIFF_DELETE:Re[Ce]="<del>"+Je+"</del>";break;case Me.DIFF_EQUAL:Re[Ce]="<span>"+Je+"</span>";break}}return Re.join("")}diffCleanupSemantic(pe){return this.diff_cleanupSemantic(pe)}_stripHtml(pe){if(this.testMode)return pe;const Re=document.createElement("div");return Re.innerHTML=pe,Re.textContent||Re.innerText||""}}function we(){p().registerHelper("markdown",function(ie){return ie&&(ie=ie.replace(/((\[(.*?)\])?\(#)((.+?):(.+?))(\))/mg,function(he,ye,Ce,Ze,Ke,Je,Oe){const Ge=Ze||Je+"/"+Oe;return'<a href="#api-'+Je+"-"+Oe+'">'+Ge+"</a>"}),ie)}),p().registerHelper("setInputType",function(ie){switch(ie){case"File":case"Email":case"Color":case"Number":case"Date":return ie[0].toLowerCase()+ie.substring(1);case"Boolean":return"checkbox";default:return"text"}});let Fe;p().registerHelper("startTimer",function(ie){return Fe=new Date,""}),p().registerHelper("stopTimer",function(ie){return console.log(new Date-Fe),""}),p().registerHelper("__",function(ie){return be(ie)}),p().registerHelper("cl",function(ie){return console.log(ie),""}),p().registerHelper("underscoreToSpace",function(ie){return ie.replace(/(_+)/g," ")}),p().registerHelper("removeDblQuotes",function(ie){return ie.replace(/"/g,"")}),p().registerHelper("assign",function(ie){if(arguments.length>0){const he=typeof arguments[1];let ye=null;(he==="string"||he==="number"||he==="boolean")&&(ye=arguments[1]),p().registerHelper(ie,function(){return ye})}return""}),p().registerHelper("nl2br",function(ie){return Re(ie)}),p().registerHelper("ifCond",function(ie,he,ye,Ce){switch(he){case"==":return ie==ye?Ce.fn(this):Ce.inverse(this);case"===":return ie===ye?Ce.fn(this):Ce.inverse(this);case"!=":return ie!=ye?Ce.fn(this):Ce.inverse(this);case"!==":return ie!==ye?Ce.fn(this):Ce.inverse(this);case"<":return ie<ye?Ce.fn(this):Ce.inverse(this);case"<=":return ie<=ye?Ce.fn(this):Ce.inverse(this);case">":return ie>ye?Ce.fn(this):Ce.inverse(this);case">=":return ie>=ye?Ce.fn(this):Ce.inverse(this);case"&&":return ie&&ye?Ce.fn(this):Ce.inverse(this);case"||":return ie||ye?Ce.fn(this):Ce.inverse(this);default:return Ce.inverse(this)}});const pe={};p().registerHelper("subTemplate",function(ie,he){pe[ie]||(pe[ie]=p().compile(document.getElementById("template-"+ie).innerHTML));const ye=pe[ie],Ce=v().extend({},this,he.hash);return new(p()).SafeString(ye(Ce))}),p().registerHelper("toLowerCase",function(ie){return ie&&typeof ie=="string"?ie.toLowerCase():""}),p().registerHelper("splitFill",function(ie,he,ye){const Ce=ie.split(he);return new Array(Ce.length).join(ye)+Ce[Ce.length-1]});function Re(ie){return(""+ie).replace(/(?:^|<\/pre>)[^]*?(?:<pre>|$)/g,he=>he.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,"$1<br>$2"))}p().registerHelper("each_compare_list_field",function(ie,he,ye){const Ce=ye.hash.field,Ze=[];ie&&ie.forEach(function(Je){const Oe=Je;Oe.key=Je[Ce],Ze.push(Oe)});const Ke=[];return he&&he.forEach(function(Je){const Oe=Je;Oe.key=Je[Ce],Ke.push(Oe)}),Ae("key",Ze,Ke,ye)}),p().registerHelper("each_compare_keys",function(ie,he,ye){const Ce=[];ie&&Object.keys(ie).forEach(function(Je){const Oe={};Oe.value=ie[Je],Oe.key=Je,Ce.push(Oe)});const Ze=[];return he&&Object.keys(he).forEach(function(Je){const Oe={};Oe.value=he[Je],Oe.key=Je,Ze.push(Oe)}),Ae("key",Ce,Ze,ye)}),p().registerHelper("body2json",function(ie,he){return Rn(ie)}),p().registerHelper("each_compare_field",function(ie,he,ye){return Ae("field",ie,he,ye)}),p().registerHelper("each_compare_title",function(ie,he,ye){return Ae("title",ie,he,ye)}),p().registerHelper("reformat",function(ie,he){if(he==="json")try{return JSON.stringify(JSON.parse(ie.trim()),null,"    ")}catch(ye){}return ie}),p().registerHelper("showDiff",function(ie,he,ye){let Ce="";if(ie===he)Ce=ie;else{if(!ie)return he;if(!he)return ie;const Ze=new En,Ke=Ze.diffMain(he,ie);Ze.diffCleanupSemantic(Ke),Ce=Ze.diffPrettyHtml(Ke),Ce=Ce.replace(/&para;/gm,"")}return ye==="nl2br"&&(Ce=Re(Ce)),Ce});function Ae(ie,he,ye,Ce){const Ze=[];let Ke=0;he&&he.forEach(function(Ge){let Qe=!1;if(ye&&ye.forEach(function(Xe){if(Ge[ie]===Xe[ie]){const qn={typeSame:!0,source:Ge,compare:Xe,index:Ke};Ze.push(qn),Qe=!0,Ke++}}),!Qe){const Xe={typeIns:!0,source:Ge,index:Ke};Ze.push(Xe),Ke++}}),ye&&ye.forEach(function(Ge){let Qe=!1;if(he&&he.forEach(function(Xe){Xe[ie]===Ge[ie]&&(Qe=!0)}),!Qe){const Xe={typeDel:!0,compare:Ge,index:Ke};Ze.push(Xe),Ke++}});let Je="";const Oe=Ze.length;for(const Ge in Ze)parseInt(Ge,10)===Oe-1&&(Ze[Ge]._last=!0),Je=Je+Ce.fn(Ze[Ge]);return Je}}document.addEventListener("DOMContentLoaded",()=>{qe(),O(),y().highlightAll()});function qe(){var Z;let Fe=[{type:"post",url:"/allies/reloads/cancellations",title:"Cancelar recarga",name:"Cancelar_recarga",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite realizar la cancelacion del registro de recarga informacion de aliados</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"pk",description:"<p>Clave de particion del objecto a cancelar</p>"},{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais del usuario logueado</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante del objecto a cancelar</p>"},{group:"Parameter",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante del objecto a cancelar</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanTrader",description:"<p>Ean del comerciante del objecto a cancelar</p>"},{group:"Parameter",type:"String",optional:!1,field:"trader",description:"<p>Nombre del comerciante del objecto a cancelar</p>"},{group:"Parameter",type:"String",optional:!1,field:"idRequest",description:"<p>Id de la solicitud</p>"},{group:"Parameter",type:"String",optional:!1,field:"cancelUser",description:"<p>Nombre y apellido del usuario logueado que esta cancelando la solicitud</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "pk": "country#CO#id_allied#10",
-  "country": "CO",
-  "eanProvider": "770201000001",
-  "provider": "colgate",
-  "eanTrader": "770201000008",
-  "trader": "Exito",
-  "idRequest": "20230904100101",
-  "cancelUser": "Francisco diaz"
+"pk": "country#CO#id_allied#10",
+"country": "CO",
+"eanProvider": "770201000001",
+"provider": "colgate",
+"eanTrader": "770201000008",
+"trader": "Exito",
+"idRequest": "20230904100101",
+"cancelUser": "Francisco diaz"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Success-Response:",content:`
 {
 
-"responseCode" : 0,   
-"responseMessage": "Se ha cancelado de forma exitosa la solicitud 20230904100101
-                     para el comercio Exito y el proveedor colgate de recarga a un aliado"
+"responseCode" : 0,
+"responseMessage": "Se ha cancelado de forma exitosa la
+solicitud 20230904100101
+para el comercio Exito y el proveedor colgate de recarga a
+un aliado"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1005,   
-"responseMessage": " El sistema no responde o el proceso no se termin\xF3 satisfactoriamente.
-                     Por favor int\xE9ntalo m\xE1s tarde"
+"responseCode" : 1005,
+"responseMessage": " El sistema no responde o el proceso
+no se termin\xF3 satisfactoriamente.
+Por favor int\xE9ntalo m\xE1s tarde"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1001,   
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente.
-                    Intenta nuevamente en unos segundos o comun\xEDcate con
-                    soporte https://soporte.cen.biz/."
+"responseCode" : 1001,
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente.
+Intenta nuevamente en unos segundos o comun\xEDcate con
+soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 {
 "responseCode" : 1001,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
-}`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/traders/availables",title:"Comerciantes disponibles por fabricante",name:"Comerciantes_disponibles_por_fabricates",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite obtener el listado de los Comerciantes que se encuentran disponibles para ser agregados a la configuracion de un aliado que hubiera sido contratado por el fabricante</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante saleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstEansTraders",description:"<p>Listado de comerciantes que ya fueron seleccionados en la configuracion de rutas IMPORTANTE si aun no se a selecciondo enviar la lista vacia</p>"}]},examples:[{title:"Request-Example:",content:`
+}`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/traders/availables Comerciantes disponibles por",title:"fabricante",name:"Comerciantes_disponibles_por_fabricates",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite obtener el listado de los Comerciantes que se encuentran disponibles para ser agregados a la configuracion de un aliado que hubiera sido contratado por el fabricante</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante saleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstEansTraders",description:"<p>Listado de comerciantes que ya fueron seleccionados en la configuracion de rutas IMPORTANTE si aun no se a selecciondo enviar la lista vacia</p>"}]},examples:[{title:"Request-Example:",content:`
 {
 "country": "CO",
 "idAllied": "10",
@@ -146,68 +151,71 @@ function print() { __p += __j.call(arguments, '') }
 "lstEansTraders": []
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"pk",description:"<p>Clave de partici\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenaci\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"typeCompany",description:"<p>tipo de compa\xF1ia (F= Fabricante, C = Comerciante)</p>"},{group:"200",type:"String",optional:!1,field:"eanCompany",description:"<p>Ean de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"companyIdentificationNumber",description:"<p>Numero de identificacion de la empresa</p>"},{group:"200",type:"Number",optional:!1,field:"checkDigit",description:"<p>Digito de verificacion de la empresa</p>"},{group:"200",type:"String",optional:!1,field:"companyName",description:"<p>Nombre de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"cityCode",description:"<p>Codigo de la ciudad de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"cityName",description:"<p>Nombre de la ciudad de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"adress",description:"<p>Direccion de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"contactName",description:"<p>Nombre de contacto de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"phone",description:"<p>Numero de telefono</p>"},{group:"200",type:"String",optional:!1,field:"email",description:"<p>Correo electronico</p>"},{group:"200",type:"String",optional:!1,field:"state",description:"<p>Estado de la compa\xF1ia (1 = ACTIVO, 0 = INACTIVO)</p>"},{group:"200",type:"String",optional:!1,field:"creationDate",description:"<p>Fecha de creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"createUser",description:"<p>usuario de Creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"modificationDate",description:"<p>Fecha de actualizacion del registro</p>"},{group:"200",type:"String",optional:!1,field:"userModification",description:"<p>Usuario que actualizo el registro</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-    "responseMessage": [
-        {
-            "pk": "company_type#C",
-            "sk": "country#CO#ean_company#7702120000016",
-            "typeCompany": "C",
-            "eanCompany": "7702120000016",
-            "companyIdentificationNumber": null,
-            "checkDigit": null,
-            "companyName": "Papeles Nacionales",
-            "country": "CO",
-            "cityCode": null,
-            "cityName": null,
-            "adress": null,
-            "contactName": null,
-            "phone": null,
-            "email": null,
-            "state": 1,
-            "creationDate": null,
-            "createUser": null,
-            "modificationDate": null,
-            "userModification": null
-        }
-    ],
-    "responseCode": 0
+"responseMessage": [
+{
+"pk": "company_type#C",
+"sk": "country#CO#ean_company#7702120000016",
+"typeCompany": "C",
+"eanCompany": "7702120000016",
+"companyIdentificationNumber": null,
+"checkDigit": null,
+"companyName": "Papeles Nacionales",
+"country": "CO",
+"cityCode": null,
+"cityName": null,
+"adress": null,
+"contactName": null,
+"phone": null,
+"email": null,
+"state": 1,
+"creationDate": null,
+"createUser": null,
+"modificationDate": null,
+"userModification": null
+}
+],
+"responseCode": 0
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/countries/traders",title:"Comerciantes por pais y aliado",name:"Comerciantes_por_pais_y_aliado",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite Obtener el listado de Comerciantes que an sido configurados para el pais y aliado seleccionado</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10"
+"country": "CO",
+"idAllied": "10"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais de la empresa</p>"},{group:"200",type:"String",optional:!1,field:"eanCompany",description:"<p>Ean de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"nameCompany",description:"<p>Nombre de la compa\xF1ia</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-  "responseMessage": [
-    {
-      "country": "CO",
-      "companies": null,
-      "eanCompany": "7702010000008",
-      "nameCompany": "Exito"
-    }
-  ],
-  "responseCode": 0
+"responseMessage": [
+{
+"country": "CO",
+"companies": null,
+"eanCompany": "7702010000008",
+"nameCompany": "Exito"
+}
+],
+"responseCode": 0
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1004,   
+"responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/routes/providers",title:"Consulta Configuracion aliado fabricante",name:"Consulta_Configuracion_aliado_fabricante",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite Obtner la configuracion de todas las rutas de la relaci\xF3n entre aliado y fabricante</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais a consultar</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del alaido a consultar</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante a consultar</p>"}]},examples:[{title:"Request-Example:",content:`
 {
@@ -216,418 +224,439 @@ function print() { __p += __j.call(arguments, '') }
 "eanProvider": "7702010000010"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"200",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante seleccionado</p>"},{group:"200",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante seleccionado</p>"},{group:"200",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"200",type:"String",optional:!1,field:"allied",description:"<p>Nombre del aliado seleccionado</p>"},{group:"200",type:"Object[]",optional:!1,field:"lstTraders",description:"<p>Listado de configuracion de comerciantes</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.eanTrader",description:"<p>Ean Comerciante</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.trader",description:"<p>Nombre del comerciante</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.dailyPath",description:"<p>Ruta diaria</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.historicPath",description:"<p>Ruta historica</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.informationReloadPath",description:"<p>Ruta Recargas</p>"},{group:"200",type:"String",optional:!1,field:"lstTraders.state",description:"<p>Estado del Registro</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-  "responseMessage": {
-    "country": "CO",
-    "eanProvider": "7702010000010",
-    "provider": "colgate",
-    "idAllied": "10",
-    "allied": "teamcore",
-    "lstTraders": [
-      {
-        "eanTrader": "7701001000008",
-        "trader": "Exito",
-        "dailyPath": "ruta 1",
-        "historicPath": "ruta 2",
-        "informationReloadPath": "ruta 3",
-        "state": "ACTIVO"
-      },
-      {
-        "eanTrader": "7701581000016",
-        "trader": "CENCO",
-        "dailyPath": "ruta 1 C",
-        "historicPath": "ruta 2 C",
-        "informationReloadPath": "ruta 3 C",
-        "state": "ACTIVO"
-      }
-    ],
-    "user": null
-  },
-  "responseCode": 0
+"responseMessage": {
+"country": "CO",
+"eanProvider": "7702010000010",
+"provider": "colgate",
+"idAllied": "10",
+"allied": "teamcore",
+"lstTraders": [
+{
+"eanTrader": "7701001000008",
+"trader": "Exito",
+"dailyPath": "ruta 1",
+"historicPath": "ruta 2",
+"informationReloadPath": "ruta 3",
+"state": "ACTIVO"
+},
+{
+"eanTrader": "7701581000016",
+"trader": "CENCO",
+"dailyPath": "ruta 1 C",
+"historicPath": "ruta 2 C",
+"informationReloadPath": "ruta 3 C",
+"state": "ACTIVO"
+}
+],
+"user": null
+},
+"responseCode": 0
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1004,   
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente.
-                    Intenta nuevamente en unos segundos o comun\xEDcate con
-                    soporte https://soporte.cen.biz/."
+"responseCode" : 1004,
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente.
+Intenta nuevamente en unos segundos o comun\xEDcate con
+soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 {
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"put",url:"/allies/routes",title:"Editar Configuracion rutas",name:"Editar_Configuracion_rutas",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite realizar la edici\xF3n de la configuracion de rutas de envio de informacion del fabricante con cada comerciante contratado y el aliado</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"allied",description:"<p>Nombre del aliado seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstTraders",description:"<p>Listado de configuracion de comerciantes</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.eanTrader",description:"<p>Ean Comerciante</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.trader",description:"<p>Nombre del comerciante</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.dailyPath",description:"<p>Ruta diaria</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.historicPath",description:"<p>Ruta historica</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.informationReloadPath",description:"<p>Ruta Recargas</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.state",description:"<p>Estado del Registro</p>"},{group:"Parameter",type:"String",optional:!1,field:"user",description:"<p>Nombre y Apellido del usuario logueado que esta editando el registro</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "eanProvider": "7702010000010",
-  "provider": "colgate",
-  "idAllied": "10",
-  "allied": "teamcore",
-  "lstTraders": [
-    {
-      "eanTrader": "7701001000008",
-      "trader": "Exito",
-      "dailyPath": "ruta 1",
-      "historicPath": "ruta 2",
-      "informationReloadPath": "ruta 3",
-      "state": "ACTIVO"
-    },
-    {
-      "eanTrader": "7701581000016",
-      "trader": "CENCO",
-      "dailyPath": "ruta 1 C",
-      "historicPath": "ruta 2 C",
-      "informationReloadPath": "ruta 3 C",
-      "state": "ACTIVO"
-    }
-  ],
-  "user": "Francisco diaz"
+"country": "CO",
+"eanProvider": "7702010000010",
+"provider": "colgate",
+"idAllied": "10",
+"allied": "teamcore",
+"lstTraders": [
+{
+"eanTrader": "7701001000008",
+"trader": "Exito",
+"dailyPath": "ruta 1",
+"historicPath": "ruta 2",
+"informationReloadPath": "ruta 3",
+"state": "ACTIVO"
+},
+{
+"eanTrader": "7701581000016",
+"trader": "CENCO",
+"dailyPath": "ruta 1 C",
+"historicPath": "ruta 2 C",
+"informationReloadPath": "ruta 3 C",
+"state": "ACTIVO"
+}
+],
+"user": "Francisco diaz"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Success-Response:",content:`
 {
 
-"responseCode" : 0,   
+"responseCode" : 0,
 "responseMessage": "Cambios guardados correctamente"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1002,   
+"responseCode" : 1002,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1002,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/providers/availables",title:"Fabricantes disponibles",name:"Fabricantes_disponibles",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite obtener el listado de los fabricantes que se encuentran disponibles para ser agregados a la configuracion de un aliado</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10"
+"country": "CO",
+"idAllied": "10"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"pk",description:"<p>Clave de partici\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenaci\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"typeCompany",description:"<p>tipo de compa\xF1ia (F= Fabricante, C = Comerciante)</p>"},{group:"200",type:"String",optional:!1,field:"eanCompany",description:"<p>Ean de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"companyIdentificationNumber",description:"<p>Numero de identificacion de la empresa</p>"},{group:"200",type:"Number",optional:!1,field:"checkDigit",description:"<p>Digito de verificacion de la empresa</p>"},{group:"200",type:"String",optional:!1,field:"companyName",description:"<p>Nombre de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"cityCode",description:"<p>Codigo de la ciudad de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"cityName",description:"<p>Nombre de la ciudad de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"adress",description:"<p>Direccion de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"contactName",description:"<p>Nombre de contacto de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"phone",description:"<p>Numero de telefono</p>"},{group:"200",type:"String",optional:!1,field:"email",description:"<p>Correo electronico</p>"},{group:"200",type:"String",optional:!1,field:"state",description:"<p>Estado de la compa\xF1ia (1 = ACTIVO, 0 = INACTIVO)</p>"},{group:"200",type:"String",optional:!1,field:"creationDate",description:"<p>Fecha de creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"createUser",description:"<p>usuario de Creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"modificationDate",description:"<p>Fecha de actualizacion del registro</p>"},{group:"200",type:"String",optional:!1,field:"userModification",description:"<p>Usuario que actualizo el registro</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-    "responseMessage": [
-        {
-            "pk": "company_type#F",
-            "sk": "country#CO#ean_company#7702120000016",
-            "typeCompany": "F",
-            "eanCompany": "7702120000016",
-            "companyIdentificationNumber": null,
-            "checkDigit": null,
-            "companyName": "Papeles Nacionales",
-            "country": "CO",
-            "cityCode": null,
-            "cityName": null,
-            "adress": null,
-            "contactName": null,
-            "phone": null,
-            "email": null,
-            "state": 1,
-            "creationDate": null,
-            "createUser": null,
-            "modificationDate": null,
-            "userModification": null
-        }
-    ],
-    "responseCode": 0
+"responseMessage": [
+{
+"pk": "company_type#F",
+"sk": "country#CO#ean_company#7702120000016",
+"typeCompany": "F",
+"eanCompany": "7702120000016",
+"companyIdentificationNumber": null,
+"checkDigit": null,
+"companyName": "Papeles Nacionales",
+"country": "CO",
+"cityCode": null,
+"cityName": null,
+"adress": null,
+"contactName": null,
+"phone": null,
+"email": null,
+"state": 1,
+"creationDate": null,
+"createUser": null,
+"modificationDate": null,
+"userModification": null
+}
+],
+"responseCode": 0
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/countries/providers",title:"Fabricantes por pais y aliado",name:"Fabricantes_por_pais_y_aliado",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite Obtener el listado de fabricantes que han sido configurados para el pais y aliado seleccionado</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10"
+"country": "CO",
+"idAllied": "10"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais de la empresa</p>"},{group:"200",type:"String",optional:!1,field:"eanCompany",description:"<p>Ean de la compa\xF1ia</p>"},{group:"200",type:"String",optional:!1,field:"nameCompany",description:"<p>Nombre de la compa\xF1ia</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-  "responseMessage": [
-    {
-      "country": "CO",
-      "companies": null,
-      "eanCompany": "7702010000010",
-      "nameCompany": "colgate"
-    }
-  ],
-  "responseCode": 0
+"responseMessage": [
+{
+"country": "CO",
+"companies": null,
+"eanCompany": "7702010000010",
+"nameCompany": "colgate"
+}
+],
+"responseCode": 0
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1004,   
+"responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/routes",title:"Guardar Configuracion rutas",name:"Guardar_Configuracion_rutas",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite realizar el guardado de la configuracion de rutas de envio de informacion del fabricante con cada comerciante contratado y el aliado</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanProvider",description:"<p>Ean del fabricante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"allied",description:"<p>Nombre del aliado seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstTraders",description:"<p>Listado de configuracion de comerciantes</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.eanTrader",description:"<p>Ean Comerciante</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.trader",description:"<p>Nombre del comerciante</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.dailyPath",description:"<p>Ruta diaria</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.historicPath",description:"<p>Ruta historica</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.informationReloadPath",description:"<p>Ruta Recargas</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.state",description:"<p>Estado del Registro</p>"},{group:"Parameter",type:"String",optional:!1,field:"user",description:"<p>Nombre y Apellido del usuario logueado que esta creado el registro</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "eanProvider": "7702010000010",
-  "provider": "colgate",
-  "idAllied": "10",
-  "allied": "teamcore",
-  "lstTraders": [
-    {
-      "eanTrader": "7701001000008",
-      "trader": "Exito",
-      "dailyPath": "ruta 1",
-      "historicPath": "ruta 2",
-      "informationReloadPath": "ruta 3",
-      "state": "ACTIVO"
-    },
-    {
-      "eanTrader": "7701581000016",
-      "trader": "CENCO",
-      "dailyPath": "ruta 1 C",
-      "historicPath": "ruta 2 C",
-      "informationReloadPath": "ruta 3 C",
-      "state": "ACTIVO"
-    }
-  ],
-  "user": "Francisco diaz"
+"country": "CO",
+"eanProvider": "7702010000010",
+"provider": "colgate",
+"idAllied": "10",
+"allied": "teamcore",
+"lstTraders": [
+{
+"eanTrader": "7701001000008",
+"trader": "Exito",
+"dailyPath": "ruta 1",
+"historicPath": "ruta 2",
+"informationReloadPath": "ruta 3",
+"state": "ACTIVO"
+},
+{
+"eanTrader": "7701581000016",
+"trader": "CENCO",
+"dailyPath": "ruta 1 C",
+"historicPath": "ruta 2 C",
+"informationReloadPath": "ruta 3 C",
+"state": "ACTIVO"
+}
+],
+"user": "Francisco diaz"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Success-Response:",content:`
 {
 
-"responseCode" : 0,   
-"responseMessage": "La configuraci\xF3n por comercio se ha creado correctamente"
+"responseCode" : 0,
+"responseMessage": "La configuraci\xF3n por comercio se ha
+creado correctamente"
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1001,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/routes/administrations",title:"Listado configuraciones",name:"Listado_configuraciones",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite obtener el listado de configuraciones de envio de informacion a los aliados</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstEansProviders",description:"<p>Listado de eans de fabricantes seleccionados IMPORTANTE si no se selecciona nada o se seleccionaron todos los elementos de la lista enviar la lista vacia ejemplo lstEansProviders[]</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstEansTraders",description:"<p>Listado de eans de comerciantes seleccionados IMPORTANTE si no se selecciona nada o se seleccionaron todos los elementos de la lista enviar la lista vacia ejemplo lstEansProviders[]</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "lstEansProviders": [
-    "7702010000010"
-  ],
-  "lstEansTraders": ["8902016389"]
+"country": "CO",
+"idAllied": "10",
+"lstEansProviders": [
+"7702010000010"
+],
+"lstEansTraders": ["8902016389"]
 }`,type:"json"},{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "lstEansProviders": [],
-  "lstEansTraders": []
+"country": "CO",
+"idAllied": "10",
+"lstEansProviders": [],
+"lstEansTraders": []
 }`,type:"json"},{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "lstEansProviders": [
-    "7702010000010"
-  ],
-  "lstEansTraders": []
+"country": "CO",
+"idAllied": "10",
+"lstEansProviders": [
+"7702010000010"
+],
+"lstEansTraders": []
 }`,type:"json"},{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "lstEansProviders": [],
-  "lstEansTraders": ["8902016389"]
+"country": "CO",
+"idAllied": "10",
+"lstEansProviders": [],
+"lstEansTraders": ["8902016389"]
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"pk",description:"<p>Clave de partici\xF3n del objecto</p>"},{group:"200",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenaci\xF3n del objecto</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais</p>"},{group:"200",type:"String",optional:!1,field:"alliedName",description:"<p>Nombre del aliado</p>"},{group:"200",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado</p>"},{group:"200",type:"String",optional:!1,field:"eanProvider",description:"<p>ean de fabricante</p>"},{group:"200",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante</p>"},{group:"200",type:"String",optional:!1,field:"eanTrader",description:"<p>Ean del comerciante</p>"},{group:"200",type:"String",optional:!1,field:"trader",description:"<p>Nombre del comerciante</p>"},{group:"200",type:"String",optional:!1,field:"dailyPath",description:"<p>Ruta diaria</p>"},{group:"200",type:"String",optional:!1,field:"historicPath",description:"<p>ruta historica</p>"},{group:"200",type:"String",optional:!1,field:"informationReloadPath",description:"<p>Ruta de recarga</p>"},{group:"200",type:"String",optional:!1,field:"creationDate",description:"<p>Fecha de creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"creationUser",description:"<p>Usuerio de creaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"modificationDate",description:"<p>Fecha de modificaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"modificationUser",description:"<p>Usuario de modificaci\xF3n</p>"},{group:"200",type:"String",optional:!1,field:"state",description:"<p>Estado del registro</p>"}]},examples:[{title:"Success-Response:",content:`
-  "responseMessage": [
-    {
-      "pk": "country#CO#id_allied#10",
-      "sk": "ean_provider#7702010000010#ean_trader#7701001000008",
-      "country": "CO",
-      "alliedName": "teamcore",
-      "idAllied": "10",
-      "eanProvider": "7702010000010",
-      "provider": "colgate",
-      "eanTrader": "7701001000008",
-      "trader": "Exito",
-      "dailyPath": "ruta 1",
-      "historicPath": "ruta 2",
-      "informationReloadPath": "ruta 3",
-      "idRequest": null,
-      "startDate": null,
-      "endDate": null,
-      "documentType": null,
-      "logFileName": null,
-      "pathLogFileName": null,
-      "creationDate": "2023-08-31 08:45:36",
-      "creationUser": "Francisco diaz",
-      "modificationDate": null,
-      "modificationUser": "Francisco diaz",
-      "cancelUser": null,
-      "state": "ACTIVO"
-    }
-  ],
-  "responseCode": 0
+"responseMessage": [
+{
+"pk": "country#CO#id_allied#10",
+"sk":
+"ean_provider#7702010000010#ean_trader#7701001000008",
+"country": "CO",
+"alliedName": "teamcore",
+"idAllied": "10",
+"eanProvider": "7702010000010",
+"provider": "colgate",
+"eanTrader": "7701001000008",
+"trader": "Exito",
+"dailyPath": "ruta 1",
+"historicPath": "ruta 2",
+"informationReloadPath": "ruta 3",
+"idRequest": null,
+"startDate": null,
+"endDate": null,
+"documentType": null,
+"logFileName": null,
+"pathLogFileName": null,
+"creationDate": "2023-08-31 08:45:36",
+"creationUser": "Francisco diaz",
+"modificationDate": null,
+"modificationUser": "Francisco diaz",
+"cancelUser": null,
+"state": "ACTIVO"
+}
+],
+"responseCode": 0
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1005,   
-"responseMessage": "No encontramos informaci\xF3n que coincida con la b\xFAsqueda.
-                    Realiza un nuevo filtro"
+"responseCode" : 1005,
+"responseMessage": "No encontramos informaci\xF3n que
+coincida con la b\xFAsqueda.
+Realiza un nuevo filtro"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1004,   
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente.
-                    Intenta nuevamente en unos segundos o comun\xEDcate con 
-                    soporte https://soporte.cen.biz/."
+"responseCode" : 1004,
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente.
+Intenta nuevamente en unos segundos o comun\xEDcate con
+soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"get",url:"/allies",title:"Listado de aliados",name:"Listado_de_aliados",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite obtener el listado de los aliados configurados en la plataforma con estado activo</p>",permission:[{name:"Usuario Autorizado"}],success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"pk",description:"<p>Clave de partici\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenaci\xF3n del objeto</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Pais del aliado</p>"},{group:"200",type:"String",optional:!1,field:"alliedName",description:"<p>Nombre del aliado</p>"},{group:"200",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado</p>"},{group:"200",type:"String",optional:!1,field:"state",description:"<p>Estado del aliado</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-  "responseMessage": [
-    {
-      "pk": "root",
-      "sk": "country#CO#id_allied#10",
-      "country": "CO",
-      "alliedName": "Teamcore",
-      "idAllied": "10",
-      "state": "ACTIVO"
-    }
-  ],
-  "responseCode": 0
+"responseMessage": [
+{
+"pk": "root",
+"sk": "country#CO#id_allied#10",
+"country": "CO",
+"alliedName": "Teamcore",
+"idAllied": "10",
+"state": "ACTIVO"
+}
+],
+"responseCode": 0
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/reloads/administrations",title:"Listado solicitudes",name:"Listado_solicitudes",group:"Aliados",description:"<p>Este servicio permite Obtener el listado de las solicitudes de recarga aplicadas a un aliado segun los filtros de busqueda</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!0,field:"lstEansProviders",description:"<p>Listado de Enas fabricantes seleccionados IMPORTANTE si no se selecciono o se seleccioanron todos los registros de la lista desplegable enviar la lista vacia</p>"},{group:"Parameter",type:"Object[]",optional:!0,field:"lstEansTraders",description:"<p>Listado de Enas Comerciante seleccionados IMPORTANTE si no se selecciono o se seleccioanron todos los registros de la lista desplegable enviar la lista vacia</p>"},{group:"Parameter",type:"String",optional:!0,field:"documentType",description:"<p>Typo de documento (sales \xF3 stock)</p>"},{group:"Parameter",type:"String",optional:!0,field:"startDate",description:"<p>Fecha inicial de la solicitud</p>"},{group:"Parameter",type:"String",optional:!0,field:"endDate",description:"<p>fecha final de la solicitud</p>"},{group:"Parameter",type:"String",optional:!0,field:"user",description:"<p>usuario que creo la solicitud</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "lstEansProviders": [
-    "7702010000010"
-  ],
-  "lstEansTraders": [],
-  "documentType":"sales",
-  "startDate": "2023-01-01",
-  "endDate":"2023-09-04",
-  "user":"fRANCISCO"
+"country": "CO",
+"idAllied": "10",
+"lstEansProviders": [
+"7702010000010"
+],
+"lstEansTraders": [],
+"documentType":"sales",
+"startDate": "2023-01-01",
+"endDate":"2023-09-04",
+"user":"fRANCISCO"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"pk",description:"<p>Clave de partocio del objecto</p>"},{group:"200",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenacion del objecto</p>"},{group:"200",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais</p>"},{group:"200",type:"String",optional:!1,field:"alliedName",description:"<p>Nombre del aliado</p>"},{group:"200",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado</p>"},{group:"200",type:"String",optional:!1,field:"eanProvider",description:"<p>ean del fabricante</p>"},{group:"200",type:"String",optional:!1,field:"provider",description:"<p>Nombre del fabricante</p>"},{group:"200",type:"String",optional:!1,field:"eanTrader",description:"<p>Ean del comerciante</p>"},{group:"200",type:"String",optional:!1,field:"trader",description:"<p>Nombre del comerciante</p>"},{group:"200",type:"String",optional:!1,field:"idRequest",description:"<p>Id de la solicitud</p>"},{group:"200",type:"String",optional:!1,field:"startDate",description:"<p>Fecha Inicial de recarga</p>"},{group:"200",type:"String",optional:!1,field:"endDate",description:"<p>Fecha final de recarga</p>"},{group:"200",type:"String",optional:!1,field:"documentType",description:"<p>Tipo de documento</p>"},{group:"200",type:"String",optional:!1,field:"logFileName",description:"<p>Nombre del archivo log</p>"},{group:"200",type:"String",optional:!1,field:"pathLogFileName",description:"<p>Ruta del archivo log</p>"},{group:"200",type:"String",optional:!1,field:"creationDate",description:"<p>Fecha de creacion del registro</p>"},{group:"200",type:"String",optional:!1,field:"creationUser",description:"<p>Usuario que creo el registro</p>"},{group:"200",type:"String",optional:!1,field:"modificationDate",description:"<p>Fecha de modificacion del registro</p>"},{group:"200",type:"String",optional:!1,field:"modificationUser",description:"<p>usuario que modifico el registro</p>"},{group:"200",type:"String",optional:!1,field:"cancelUser",description:"<p>Usuario que cancelo el registro</p>"},{group:"200",type:"String",optional:!1,field:"state",description:"<p>Estado del registro</p>"}]},examples:[{title:"Success-Response:",content:`
 {
-  "responseMessage": [
-    {
-      "pk": "country#CO#id_allied#10",
-      "sk": "id_request#20230904100101#ean_provider#770201000001#ean_trader#
-              770201000008#document_type#sales",
-      "country": "CO",
-      "alliedName": "teamcore",
-      "idAllied": "10",
-      "eanProvider": "770201000001",
-      "provider": "otro fabricante",
-      "eanTrader": "770201000008",
-      "trader": "Exito",
-      "dailyPath": null,
-      "historicPath": null,
-      "informationReloadPath": null,
-      "idRequest": "20230904100101",
-      "startDate": null,
-      "endDate": null,
-      "documentType": "sales",
-      "logFileName": null,
-      "pathLogFileName": null,
-      "creationDate": "2023-09-04 10:01:01",
-      "creationUser": "francisco Diaz",
-      "modificationDate": null,
-      "modificationUser": null,
-      "cancelUser": null,
-      "state": "PENDIENTE"
-    }
-  ],
-  "responseCode": 0
+"responseMessage": [
+{
+"pk": "country#CO#id_allied#10",
+"sk":
+"id_request#20230904100101#ean_provider#770201000001#ean_trader#
+770201000008#document_type#sales",
+"country": "CO",
+"alliedName": "teamcore",
+"idAllied": "10",
+"eanProvider": "770201000001",
+"provider": "otro fabricante",
+"eanTrader": "770201000008",
+"trader": "Exito",
+"dailyPath": null,
+"historicPath": null,
+"informationReloadPath": null,
+"idRequest": "20230904100101",
+"startDate": null,
+"endDate": null,
+"documentType": "sales",
+"logFileName": null,
+"pathLogFileName": null,
+"creationDate": "2023-09-04 10:01:01",
+"creationUser": "francisco Diaz",
+"modificationDate": null,
+"modificationUser": null,
+"cancelUser": null,
+"state": "PENDIENTE"
+}
+],
+"responseCode": 0
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1005,   
+"responseCode" : 1005,
 
-"responseMessage": "No encontramos informaci\xF3n que coincida con la b\xFAsqueda. Realiza un nuevo filtro"
+"responseMessage": "No encontramos informaci\xF3n que
+coincida con la b\xFAsqueda. Realiza un nuevo filtro"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1004,   
+"responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 {
 "responseCode" : 1004,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},version:"0.0.0",filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/allies/reloads",title:"Recargas aliados",name:"Recargas_aliados",group:"Aliados",version:"0.1.0",description:"<p>Este servicio permite realizar la configuracion de recarga de informaci\xF3n para el aliado seleccionado con los fabricantes y comerciantes</p>",permission:[{name:"Usuario Autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Codigo del pais seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"idAllied",description:"<p>Id del aliado seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"alliedName",description:"<p>Nombre del aliado seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstProviders",description:"<p>Listado de fabricantes seleccioandos</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstProviders.eanCompany",description:"<p>Ean del fabricante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstProviders.nameCompany",description:"<p>Nombre del fabricante seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstTraders",description:"<p>Listado de comerciantes seleccioandos</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.eanCompany",description:"<p>Ean del comerciante seleccionado</p>"},{group:"Parameter",type:"String",optional:!1,field:"lstTraders.nameCompany",description:"<p>Nombre del comerciante seleccionado</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstDocumentsTypes",description:"<p>Listado de tipos de documentos(sales \xF3 stock)</p>"},{group:"Parameter",type:"String",optional:!1,field:"startDate",description:"<p>Fecha inicial a recargar</p>"},{group:"Parameter",type:"String",optional:!1,field:"endDate",description:"<p>Fecha final a recargar</p>"},{group:"Parameter",type:"String",optional:!1,field:"user",description:"<p>Nombre y apellido del usuario logueado que esta creando el registro</p>"}]},examples:[{title:"Request-Example:",content:`
 {
-  "country": "CO",
-  "idAllied": "10",
-  "alliedName": "teamcore",
-  "lstProviders": [
-    {
-      "eanCompany": "7702010000010",
-      "nameCompany": "colgate"
-    },
-    {
-      "eanCompany": "770201000001",
-      "nameCompany": "otro fabricante"
-    }
-  ],
-  "lstTraders": [
-    {
-      "eanCompany": "770201000008",
-      "nameCompany": "Exito"
-    }
-  ],
-  "lstDocumentsTypes": [
-    "sales",
-    "stock"
-  ],
-  "startDate": "2023-01-01",
-  "endDate": "2023-02-01",
-  "user": "francisco Diaz"
+"country": "CO",
+"idAllied": "10",
+"alliedName": "teamcore",
+"lstProviders": [
+{
+"eanCompany": "7702010000010",
+"nameCompany": "colgate"
+},
+{
+"eanCompany": "770201000001",
+"nameCompany": "otro fabricante"
+}
+],
+"lstTraders": [
+{
+"eanCompany": "770201000008",
+"nameCompany": "Exito"
+}
+],
+"lstDocumentsTypes": [
+"sales",
+"stock"
+],
+"startDate": "2023-01-01",
+"endDate": "2023-02-01",
+"user": "francisco Diaz"
 }`,type:"json"}]},success:{fields:{200:[{group:"200",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"200",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Success-Response:",content:`
 {
 
-"responseCode" : 0,   
-"responseMessage": "Consulta el estado de la solicitud en la funcionalidad Ver Solicitudes"
+"responseCode" : 0,
+"responseMessage": "Consulta el estado de la solicitud en
+la funcionalidad Ver Solicitudes"
 }`,type:"json"},{title:"Success-Response:",content:`
 {
 
-"responseCode" : 1001,   
+"responseCode" : 1001,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},error:{fields:{500:[{group:"500",type:"String",optional:!1,field:"responseCode",description:"<p>C\xF3digo de respuesta</p>"},{group:"500",type:"String",optional:!1,field:"responseMessage",description:"<p>Mensaje de respuesta</p>"}]},examples:[{title:"Error-Response:",content:`
 
 "responseCode" : 1001,
 
-"responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente."
-                    "Intenta nuevamente en unos segundos o comun\xEDcate"
-                    "con soporte https://soporte.cen.biz/."
+"responseMessage": "El sistema no responde o el proceso no
+se termin\xF3 satisfactoriamente."
+"Intenta nuevamente en unos segundos o comun\xEDcate"
+"con soporte https://soporte.cen.biz/."
 
 }`,type:"json"}]},filename:"AlliedWebApi.java",groupTitle:"Aliados"},{type:"post",url:"/configurations/special/files/providers/loads",title:"Consulta configuraci\xF3n",name:"Consulta_configuraci\xF3n",group:"Archivos_especiales_cliente",version:"0.1.0",description:"<p>Este servicio permite obtener la configuracion de un archivo especial por su pk y sk</p>",permission:[{name:"Usuario autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"pk",description:"<p>Clave de particion del objecto</p>"},{group:"Parameter",type:"String",optional:!1,field:"sk",description:"<p>Clave de ordenacion del objecto</p>"}]},examples:[{title:"Request-Example:",content:` 
 {
@@ -894,6 +923,34 @@ function print() { __p += __j.call(arguments, '') }
 "responseMessage": "Por favor int\xE9ntelo m\xE1s tarde. En caso de persistir 
                    el error por favor comunicarse con Soporte https://soporte.cen.biz/",
 "responseCode": 1004
+}`,type:"json"}]},filename:"ConfigurationSpecialFileWebApi.java",groupTitle:"Archivos_especiales_cliente"},{type:"post",url:"/configurations/special/files/reprocess",title:"Reprocesar archivos especiales",name:"Reprocesar_archivos_especiales",group:"Archivos_especiales_cliente",version:"0.1.0",description:"<p>Este servicio permite realizar el reproceso de archivos especiales para una fecha en especifico, o para una fecha y fabricante en especifico, o para un archivos especifico en una fecha</p>",permission:[{name:"Usuario administrador"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"String",optional:!1,field:"reprocessDate",description:"<p>Fecha a generar el archivo especial</p>"},{group:"Parameter",type:"String",optional:!1,field:"reprocessAll",description:"<p>Reprocesar todo, si se quiere reprocesar todos los archivos que habian para una fecha enviar el valor en SI si vamos a reprocesar una archivo para un fabricante unicamente enviar el valor en NO</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstEansReprocess",description:"<p>Listado de eans a reporcesar, cuando queremos reprocesar todas los archivos para una fecha y para uno o varios fabricantes en este campo se debe enviar el listado de los eans</p>"},{group:"Parameter",type:"Object[]",optional:!1,field:"lstSkReportReprocess",description:"<p>Listado de las sk  de los archivos que se requieren generar en la fecha seleccionada si se envia este campo el campo de lstEansReprocess debe ser obligatorio</p>"}]},examples:[{title:"Request-Example:",content:`
+{
+  "reprocessDate": "2024-05-21",
+  "reprocessAll": "SI",
+  "lstEansReprocess": [],
+  "lstSkReportReprocess": []
+}`,type:"json"},{title:"Request-Example-Por-Empresa:",content:`
+{
+  "reprocessDate": "2024-05-21",
+  "reprocessAll": "NO",
+  "lstEansReprocess": ['ean1','ean2'],
+  "lstSkReportReprocess": []
+}`,type:"json"},{title:"Request-Example-Por-Empresa-pivote:",content:`
+{
+  "reprocessDate": "2024-05-21",
+  "reprocessAll": "NO",
+  "lstEansReprocess": ['ean1'],
+  "lstSkReportReprocess": ['skpivote1','skpivote2']
+}`,type:"json"}]},success:{examples:[{title:"Success-Response:",content:`
+{
+ "responseCode" : 0,
+ "responseMessage": "Cambios guardados exitosamente"
+}`,type:"json"},{title:"Success-Response-error-controlado:",content:`
+{
+ "responseCode" : 1004,
+ "responseMessage": "El sistema no responde o el proceso no se termin\xF3 satisfactoriamente.
+                     Intenta nuevamente en unos segundos o
+                      comun\xEDcate con soporte https://soporte.cen.biz/."
 }`,type:"json"}]},filename:"ConfigurationSpecialFileWebApi.java",groupTitle:"Archivos_especiales_cliente"},{type:"post",url:"/externals/files/uploads",title:"Carga archivos externos",name:"Carga_archivos_externos",group:"Archivos_externos",version:"0.1.0",description:"<p>Este servicio permite la carga de archivos externos de ventas e inventarios ya sea por un comerciante o fabricante</p>",permission:[{name:"Usuario autorizado"}],parameter:{fields:{Parameter:[{group:"Parameter",type:"Number",optional:!1,field:"idFileType",description:"<p>Valor 27 archivos externos sales \xF3 stock</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanCompany",description:"<p>Ean de la compa\xF1ia logueada</p>"},{group:"Parameter",type:"String",optional:!1,field:"fileName",description:"<p>Nombre del archivo a cargar</p>"},{group:"Parameter",type:"String",optional:!1,field:"emailLoad",description:"<p>Correo del usuario logueado</p>"},{group:"Parameter",type:"String",optional:!1,field:"userLoad",description:"<p>Nombre y appelido del usuario logueado</p>"},{group:"Parameter",type:"String",optional:!1,field:"fileUpload",description:"<p>Contenido del archivo a cargar en base64</p>"},{group:"Parameter",type:"String",optional:!1,field:"country",description:"<p>Pais de la empresa logueada</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanIssuer",description:"<p>Ean de la empresa emisor del archivo</p>"},{group:"Parameter",type:"String",optional:!1,field:"eanReceiver",description:"<p>Ean de la empresa receptora del archivo</p>"},{group:"Parameter",type:"String",optional:!1,field:"documentType",description:"<p>Tipo de documento a cargar (sales \xF3 stock)</p>"}]},examples:[{title:"Request-Example:",content:`
 {
   "idFileType": 27,
@@ -9528,4 +9585,4 @@ LhZ2GvSl3z_N5gzDX9tRn28LzQl3ErERiMO-Lfez5nB9rr7Hzomdx_pv9QB1SsUhL
 ywYjUQ8gBQsj7WSWquDfZ97qGFKeM2TAQQcwsU5W7nONm1VJ7K6dGu6upxE",
 "responseMessage": "Generaci\xF3n de JWT correctamente",
 "responseCode": "0"
-}`,type:"json"}]},filename:"QlikWebApi.java",groupTitle:"qlik"}];const pe={name:"Analitica",version:"0.1.0",description:"Documentacion para el proyecto de analitica",url:"http://prescriptiva-service/v1",sampleUrl:!1,defaultVersion:"0.0.0",apidoc:"0.3.0",generator:{name:"apidoc",time:"Fri May 24 2024 16:20:50 GMT-0500 (hora est\xE1ndar de Colombia)",url:"https://apidocjs.com",version:"0.51.1"}};we();const Re=p().compile(v()("#template-header").html()),Ae=p().compile(v()("#template-footer").html()),ie=p().compile(v()("#template-article").html()),he=p().compile(v()("#template-compare-article").html()),ye=p().compile(v()("#template-generator").html()),Ce=p().compile(v()("#template-project").html()),Ze=p().compile(v()("#template-sections").html()),Ke=p().compile(v()("#template-sidenav").html()),Je={aloneDisplay:!1,showRequiredLabels:!1,withGenerator:!0,withCompare:!0};pe.template=Object.assign(Je,(Z=pe.template)!=null?Z:{}),pe.template.forceLanguage&&Le(pe.template.forceLanguage);const Oe=(0,r.groupBy)(Fe,Y=>Y.group),Ge={};v().each(Oe,(Y,q)=>{Ge[Y]=(0,r.groupBy)(q,X=>X.name)});const Qe=[];v().each(Ge,(Y,q)=>{let X=[];v().each(q,(ee,se)=>{const ue=se[0].title;ue&&X.push(ue.toLowerCase()+"#~#"+ee)}),X.sort(),pe.order&&(X=L(X,pe.order,"#~#")),X.forEach(ee=>{const ue=ee.split("#~#")[1];q[ue].forEach(me=>{Qe.push(me)})})}),Fe=Qe;let Xe={};const qn={};let Ln={};Ln[pe.version]=1,v().each(Fe,(Y,q)=>{Xe[q.group]=1,qn[q.group]=q.groupTitle||q.group,Ln[q.version]=1}),Xe=Object.keys(Xe),Xe.sort(),pe.order&&(Xe=G(qn,pe.order)),Ln=Object.keys(Ln),Ln.sort(o().compare),Ln.reverse();const An=[];Xe.forEach(Y=>{An.push({group:Y,isHeader:!0,title:qn[Y]});let q="";Fe.forEach(X=>{X.group===Y&&(q!==X.name?An.push({title:X.title,group:Y,name:X.name,type:X.type,version:X.version,url:X.url}):An.push({title:X.title,group:Y,hidden:!0,name:X.name,type:X.type,version:X.version,url:X.url}),q=X.name)})});function Tt(Y,q,X){let ee=!1;if(!q)return ee;const se=q.match(/<h(1|2).*?>(.+?)<\/h(1|2)>/gi);return se&&se.forEach(function(ue){const me=ue.substring(2,3),Ee=ue.replace(/<.+?>/g,""),Te=ue.match(/id="api-([^-]+)(?:-(.+))?"/),Ie=Te?Te[1]:null,He=Te?Te[2]:null;me==="1"&&Ee&&Ie&&(Y.splice(X,0,{group:Ie,isHeader:!0,title:Ee,isFixed:!0}),X++,ee=!0),me==="2"&&Ee&&Ie&&He&&(Y.splice(X,0,{group:Ie,name:He,isHeader:!1,title:Ee,isFixed:!1,version:"1.0"}),X++)}),ee}let at;if(pe.header&&(at=Tt(An,pe.header.content,0),at||An.unshift({group:"_header",isHeader:!0,title:pe.header.title==null?be("General"):pe.header.title,isFixed:!0})),pe.footer){const Y=An.length;at=Tt(An,pe.footer.content,An.length),!at&&pe.footer.title!=null&&An.splice(Y,0,{group:"_footer",isHeader:!0,title:pe.footer.title,isFixed:!0})}const Wn=pe.title?pe.title:"apiDoc: "+pe.name+" - "+pe.version;v()(document).attr("title",Wn),v()("#loader").remove();const gt={nav:An};v()("#sidenav").append(Ke(gt)),v()("#generator").append(ye(pe)),(0,r.extend)(pe,{versions:Ln}),v()("#project").append(Ce(pe)),pe.header&&v()("#header").append(Re(pe.header)),pe.footer&&(v()("#footer").append(Ae(pe.footer)),pe.template.aloneDisplay&&document.getElementById("api-_footer").classList.add("hide"));const Fn={};let mt="";Xe.forEach(function(Y){const q=[];let X="",ee={},se=Y,ue="";Fn[Y]={},Fe.forEach(function(me){Y===me.group&&(X!==me.name?(Fe.forEach(function(Ee){Y===Ee.group&&me.name===Ee.name&&(Object.prototype.hasOwnProperty.call(Fn[me.group],me.name)||(Fn[me.group][me.name]=[]),Fn[me.group][me.name].push(Ee.version))}),ee={article:me,versions:Fn[me.group][me.name]}):ee={article:me,hidden:!0,versions:Fn[me.group][me.name]},pe.sampleUrl&&pe.sampleUrl===!0&&(pe.sampleUrl=window.location.origin),pe.url&&ee.article.url.substr(0,4).toLowerCase()!=="http"&&(ee.article.url=pe.url+ee.article.url),Rt(ee,me),me.groupTitle&&(se=me.groupTitle),me.groupDescription&&(ue=me.groupDescription),q.push({article:ie(ee),group:me.group,name:me.name,aloneDisplay:pe.template.aloneDisplay}),X=me.name)}),ee={group:Y,title:se,description:ue,articles:q,aloneDisplay:pe.template.aloneDisplay},mt+=Ze(ee)}),v()("#sections").append(mt),pe.template.aloneDisplay||(document.body.dataset.spy="scroll",v()("body").scrollspy({target:"#scrollingNav"})),v()(".form-control").on("focus change",function(){v()(this).removeClass("border-danger")}),v()(".sidenav").find("a").on("click",function(Y){Y.preventDefault();const q=this.getAttribute("href");if(pe.template.aloneDisplay){const X=document.querySelector(".sidenav > li.active");X&&X.classList.remove("active"),this.parentNode.classList.add("active")}else{const X=document.querySelector(q);X&&v()("html,body").animate({scrollTop:X.offsetTop},400)}window.location.hash=q});function vn(Y){let q=!1;return v().each(Y,X=>{q=q||(0,r.some)(Y[X],ee=>ee.type)}),q}function Nt(){v()('button[data-toggle="popover"]').popover().click(function(q){q.preventDefault()});const Y=v()("#version strong").html();if(v()("#sidenav li").removeClass("is-new"),pe.template.withCompare&&v()("#sidenav li[data-version='"+Y+"']").each(function(){const q=v()(this).data("group"),X=v()(this).data("name"),ee=v()("#sidenav li[data-group='"+q+"'][data-name='"+X+"']").length,se=v()("#sidenav li[data-group='"+q+"'][data-name='"+X+"']").index(v()(this));(ee===1||se===ee-1)&&v()(this).addClass("is-new")}),v()(".nav-tabs-examples a").click(function(q){q.preventDefault(),v()(this).tab("show")}),v()(".nav-tabs-examples").find("a:first").tab("show"),v()(".sample-request-content-type-switch").change(function(){v()(this).val()==="body-form-data"?(v()("#sample-request-body-json-input-"+v()(this).data("id")).hide(),v()("#sample-request-body-form-input-"+v()(this).data("id")).show()):(v()("#sample-request-body-form-input-"+v()(this).data("id")).hide(),v()("#sample-request-body-json-input-"+v()(this).data("id")).show())}),pe.template.aloneDisplay&&(v()(".show-group").click(function(){const q="."+v()(this).attr("data-group")+"-group",X="."+v()(this).attr("data-group")+"-article";v()(".show-api-group").addClass("hide"),v()(q).removeClass("hide"),v()(".show-api-article").addClass("hide"),v()(X).removeClass("hide")}),v()(".show-api").click(function(){const q=this.getAttribute("href").substring(1),X=document.getElementById("version").textContent.trim(),ee=`.${this.dataset.name}-article`,se=`[id="${q}-${X}"]`,ue=`.${this.dataset.group}-group`;v()(".show-api-group").addClass("hide"),v()(ue).removeClass("hide"),v()(".show-api-article").addClass("hide");let me=v()(ee);v()(se).length&&(me=v()(se).parent()),me.removeClass("hide"),q.match(/_(header|footer)/)&&document.getElementById(q).classList.remove("hide")})),pe.template.aloneDisplay||v()("body").scrollspy("refresh"),pe.template.aloneDisplay){const q=window.location.hash;if(q!=null&&q.length!==0){const X=document.getElementById("version").textContent.trim(),ee=document.querySelector(`li .${q.slice(1)}-init`),se=document.querySelector(`li[data-version="${X}"] .show-api.${q.slice(1)}-init`);let ue=ee;se&&(ue=se),ue.click()}}}function kt(Y){typeof Y=="undefined"?Y=v()("#version strong").html():v()("#version strong").html(Y),v()("article").addClass("hide"),v()("#sidenav li:not(.nav-fixed)").addClass("hide");const q={};document.querySelectorAll("article[data-version]").forEach(X=>{const ee=X.dataset.group,se=X.dataset.name,ue=X.dataset.version,me=ee+se;!q[me]&&o().lte(ue,Y)&&(q[me]=!0,document.querySelector(`article[data-group="${ee}"][data-name="${se}"][data-version="${ue}"]`).classList.remove("hide"),document.querySelector(`#sidenav li[data-group="${ee}"][data-name="${se}"][data-version="${ue}"]`).classList.remove("hide"),document.querySelector(`#sidenav li.nav-header[data-group="${ee}"]`).classList.remove("hide"))}),v()("article[data-version]").each(function(X){const ee=v()(this).data("group");v()("section#api-"+ee).removeClass("hide"),v()("section#api-"+ee+" article:visible").length===0?v()("section#api-"+ee).addClass("hide"):v()("section#api-"+ee).removeClass("hide")})}if(kt(),v()("#versions li.version a").on("click",function(Y){Y.preventDefault(),kt(v()(this).html())}),v()("#compareAllWithPredecessor").on("click",Ut),v()("article .versions li.version a").on("click",dt),v().urlParam=function(Y){const q=new RegExp("[\\?&amp;]"+Y+"=([^&amp;#]*)").exec(window.location.href);return q&&q[1]?q[1]:null},v().urlParam("compare")&&v()("#compareAllWithPredecessor").trigger("click"),window.location.hash){const Y=decodeURI(window.location.hash);v()(Y).length>0&&v()("html,body").animate({scrollTop:parseInt(v()(Y).offset().top)},0)}v()("#scrollingNav .sidenav-search input.search").focus(),v()('[data-action="filter-search"]').on("keyup",Y=>{const q=Y.currentTarget.value.toLowerCase();v()(".sidenav").find("a.nav-list-item").each((X,ee)=>{v()(ee).show(),ee.innerText.toLowerCase().includes(q)||v()(ee).hide()})}),v()("span.search-reset").on("click",function(){v()("#scrollingNav .sidenav-search input.search").val("").focus(),v()(".sidenav").find("a.nav-list-item").show()});function dt(Y){Y.preventDefault();const q=v()(this).parents("article"),X=v()(this).html(),ee=q.find(".version"),se=ee.find("strong").html();ee.find("strong").html(X);const ue=q.data("group"),me=q.data("name"),Ee=q.data("version"),Te=q.data("compare-version");if(Te!==X&&!(!Te&&Ee===X)){if(Te&&Fn[ue][me][0]===X||Ee===X)Kt(ue,me,Ee);else{let Ie={},He={};v().each(Ge[ue][me],function(rn,Zn){Zn.version===Ee&&(Ie=Zn),Zn.version===X&&(He=Zn)});const ve={article:Ie,compare:He,versions:Fn[ue][me]};ve.article.id=ve.article.group+"-"+ve.article.name+"-"+ve.article.version,ve.article.id=ve.article.id.replace(/\./g,"_"),ve.compare.id=ve.compare.group+"-"+ve.compare.name+"-"+ve.compare.version,ve.compare.id=ve.compare.id.replace(/\./g,"_");let je=Ie;je.parameter&&je.parameter.fields&&(ve._hasTypeInParameterFields=vn(je.parameter.fields)),je.error&&je.error.fields&&(ve._hasTypeInErrorFields=vn(je.error.fields)),je.success&&je.success.fields&&(ve._hasTypeInSuccessFields=vn(je.success.fields)),je.info&&je.info.fields&&(ve._hasTypeInInfoFields=vn(je.info.fields)),je=He,ve._hasTypeInParameterFields!==!0&&je.parameter&&je.parameter.fields&&(ve._hasTypeInParameterFields=vn(je.parameter.fields)),ve._hasTypeInErrorFields!==!0&&je.error&&je.error.fields&&(ve._hasTypeInErrorFields=vn(je.error.fields)),ve._hasTypeInSuccessFields!==!0&&je.success&&je.success.fields&&(ve._hasTypeInSuccessFields=vn(je.success.fields)),ve._hasTypeInInfoFields!==!0&&je.info&&je.info.fields&&(ve._hasTypeInInfoFields=vn(je.info.fields));const Sn=he(ve);q.after(Sn),q.next().find(".versions li.version a").on("click",dt),v()("#sidenav li[data-group='"+ue+"'][data-name='"+me+"'][data-version='"+se+"']").addClass("has-modifications"),q.remove()}y().highlightAll()}}function Ut(Y){Y.preventDefault(),v()("article:visible .versions").each(function(){const X=v()(this).parents("article").data("version");let ee=null;v()(this).find("li.version a").each(function(){v()(this).html()<X&&!ee&&(ee=v()(this))}),ee&&ee.trigger("click")})}function Rt(Y,q){Y.id=Y.article.group+"-"+Y.article.name+"-"+Y.article.version,Y.id=Y.id.replace(/\./g,"_"),q.header&&q.header.fields&&(Y._hasTypeInHeaderFields=vn(q.header.fields)),q.parameter&&q.parameter.fields&&(Y._hasTypeInParameterFields=vn(q.parameter.fields)),q.error&&q.error.fields&&(Y._hasTypeInErrorFields=vn(q.error.fields)),q.success&&q.success.fields&&(Y._hasTypeInSuccessFields=vn(q.success.fields)),q.info&&q.info.fields&&(Y._hasTypeInInfoFields=vn(q.info.fields)),Y.template=pe.template}function po(Y,q,X){let ee={};v().each(Ge[Y][q],function(ue,me){me.version===X&&(ee=me)});const se={article:ee,versions:Fn[Y][q]};return Rt(se,ee),ie(se)}function Kt(Y,q,X){const ee=v()("article[data-group='"+Y+"'][data-name='"+q+"']:visible"),se=po(Y,q,X);ee.after(se),ee.next().find(".versions li.version a").on("click",dt),v()("#sidenav li[data-group='"+Y+"'][data-name='"+q+"'][data-version='"+X+"']").removeClass("has-modifications"),ee.remove()}function L(Y,q,X){const ee=[];return q.forEach(function(se){X?Y.forEach(function(ue){const me=ue.split(X);(me[0]===se||me[1]===se)&&ee.push(ue)}):Y.forEach(function(ue){ue===se&&ee.push(se)})}),Y.forEach(function(se){ee.indexOf(se)===-1&&ee.push(se)}),ee}function G(Y,q){const X=[];return q.forEach(ee=>{Object.keys(Y).forEach(se=>{Y[se].replace(/_/g," ")===ee&&X.push(se)})}),Object.keys(Y).forEach(ee=>{X.indexOf(ee)===-1&&X.push(ee)}),X}Nt()}})()})();
+}`,type:"json"}]},filename:"QlikWebApi.java",groupTitle:"qlik"}];const pe={name:"Analitica",version:"0.1.0",description:"Documentacion para el proyecto de analitica",url:"http://prescriptiva-service/v1",sampleUrl:!1,defaultVersion:"0.0.0",apidoc:"0.3.0",generator:{name:"apidoc",time:"Fri May 31 2024 14:57:28 GMT-0500 (hora est\xE1ndar de Colombia)",url:"https://apidocjs.com",version:"0.51.1"}};we();const Re=p().compile(v()("#template-header").html()),Ae=p().compile(v()("#template-footer").html()),ie=p().compile(v()("#template-article").html()),he=p().compile(v()("#template-compare-article").html()),ye=p().compile(v()("#template-generator").html()),Ce=p().compile(v()("#template-project").html()),Ze=p().compile(v()("#template-sections").html()),Ke=p().compile(v()("#template-sidenav").html()),Je={aloneDisplay:!1,showRequiredLabels:!1,withGenerator:!0,withCompare:!0};pe.template=Object.assign(Je,(Z=pe.template)!=null?Z:{}),pe.template.forceLanguage&&Le(pe.template.forceLanguage);const Oe=(0,r.groupBy)(Fe,Y=>Y.group),Ge={};v().each(Oe,(Y,q)=>{Ge[Y]=(0,r.groupBy)(q,X=>X.name)});const Qe=[];v().each(Ge,(Y,q)=>{let X=[];v().each(q,(ee,se)=>{const ue=se[0].title;ue&&X.push(ue.toLowerCase()+"#~#"+ee)}),X.sort(),pe.order&&(X=L(X,pe.order,"#~#")),X.forEach(ee=>{const ue=ee.split("#~#")[1];q[ue].forEach(me=>{Qe.push(me)})})}),Fe=Qe;let Xe={};const qn={};let Ln={};Ln[pe.version]=1,v().each(Fe,(Y,q)=>{Xe[q.group]=1,qn[q.group]=q.groupTitle||q.group,Ln[q.version]=1}),Xe=Object.keys(Xe),Xe.sort(),pe.order&&(Xe=G(qn,pe.order)),Ln=Object.keys(Ln),Ln.sort(o().compare),Ln.reverse();const An=[];Xe.forEach(Y=>{An.push({group:Y,isHeader:!0,title:qn[Y]});let q="";Fe.forEach(X=>{X.group===Y&&(q!==X.name?An.push({title:X.title,group:Y,name:X.name,type:X.type,version:X.version,url:X.url}):An.push({title:X.title,group:Y,hidden:!0,name:X.name,type:X.type,version:X.version,url:X.url}),q=X.name)})});function Tt(Y,q,X){let ee=!1;if(!q)return ee;const se=q.match(/<h(1|2).*?>(.+?)<\/h(1|2)>/gi);return se&&se.forEach(function(ue){const me=ue.substring(2,3),Ee=ue.replace(/<.+?>/g,""),Te=ue.match(/id="api-([^-]+)(?:-(.+))?"/),Ie=Te?Te[1]:null,He=Te?Te[2]:null;me==="1"&&Ee&&Ie&&(Y.splice(X,0,{group:Ie,isHeader:!0,title:Ee,isFixed:!0}),X++,ee=!0),me==="2"&&Ee&&Ie&&He&&(Y.splice(X,0,{group:Ie,name:He,isHeader:!1,title:Ee,isFixed:!1,version:"1.0"}),X++)}),ee}let at;if(pe.header&&(at=Tt(An,pe.header.content,0),at||An.unshift({group:"_header",isHeader:!0,title:pe.header.title==null?be("General"):pe.header.title,isFixed:!0})),pe.footer){const Y=An.length;at=Tt(An,pe.footer.content,An.length),!at&&pe.footer.title!=null&&An.splice(Y,0,{group:"_footer",isHeader:!0,title:pe.footer.title,isFixed:!0})}const Wn=pe.title?pe.title:"apiDoc: "+pe.name+" - "+pe.version;v()(document).attr("title",Wn),v()("#loader").remove();const gt={nav:An};v()("#sidenav").append(Ke(gt)),v()("#generator").append(ye(pe)),(0,r.extend)(pe,{versions:Ln}),v()("#project").append(Ce(pe)),pe.header&&v()("#header").append(Re(pe.header)),pe.footer&&(v()("#footer").append(Ae(pe.footer)),pe.template.aloneDisplay&&document.getElementById("api-_footer").classList.add("hide"));const Fn={};let mt="";Xe.forEach(function(Y){const q=[];let X="",ee={},se=Y,ue="";Fn[Y]={},Fe.forEach(function(me){Y===me.group&&(X!==me.name?(Fe.forEach(function(Ee){Y===Ee.group&&me.name===Ee.name&&(Object.prototype.hasOwnProperty.call(Fn[me.group],me.name)||(Fn[me.group][me.name]=[]),Fn[me.group][me.name].push(Ee.version))}),ee={article:me,versions:Fn[me.group][me.name]}):ee={article:me,hidden:!0,versions:Fn[me.group][me.name]},pe.sampleUrl&&pe.sampleUrl===!0&&(pe.sampleUrl=window.location.origin),pe.url&&ee.article.url.substr(0,4).toLowerCase()!=="http"&&(ee.article.url=pe.url+ee.article.url),Rt(ee,me),me.groupTitle&&(se=me.groupTitle),me.groupDescription&&(ue=me.groupDescription),q.push({article:ie(ee),group:me.group,name:me.name,aloneDisplay:pe.template.aloneDisplay}),X=me.name)}),ee={group:Y,title:se,description:ue,articles:q,aloneDisplay:pe.template.aloneDisplay},mt+=Ze(ee)}),v()("#sections").append(mt),pe.template.aloneDisplay||(document.body.dataset.spy="scroll",v()("body").scrollspy({target:"#scrollingNav"})),v()(".form-control").on("focus change",function(){v()(this).removeClass("border-danger")}),v()(".sidenav").find("a").on("click",function(Y){Y.preventDefault();const q=this.getAttribute("href");if(pe.template.aloneDisplay){const X=document.querySelector(".sidenav > li.active");X&&X.classList.remove("active"),this.parentNode.classList.add("active")}else{const X=document.querySelector(q);X&&v()("html,body").animate({scrollTop:X.offsetTop},400)}window.location.hash=q});function vn(Y){let q=!1;return v().each(Y,X=>{q=q||(0,r.some)(Y[X],ee=>ee.type)}),q}function Nt(){v()('button[data-toggle="popover"]').popover().click(function(q){q.preventDefault()});const Y=v()("#version strong").html();if(v()("#sidenav li").removeClass("is-new"),pe.template.withCompare&&v()("#sidenav li[data-version='"+Y+"']").each(function(){const q=v()(this).data("group"),X=v()(this).data("name"),ee=v()("#sidenav li[data-group='"+q+"'][data-name='"+X+"']").length,se=v()("#sidenav li[data-group='"+q+"'][data-name='"+X+"']").index(v()(this));(ee===1||se===ee-1)&&v()(this).addClass("is-new")}),v()(".nav-tabs-examples a").click(function(q){q.preventDefault(),v()(this).tab("show")}),v()(".nav-tabs-examples").find("a:first").tab("show"),v()(".sample-request-content-type-switch").change(function(){v()(this).val()==="body-form-data"?(v()("#sample-request-body-json-input-"+v()(this).data("id")).hide(),v()("#sample-request-body-form-input-"+v()(this).data("id")).show()):(v()("#sample-request-body-form-input-"+v()(this).data("id")).hide(),v()("#sample-request-body-json-input-"+v()(this).data("id")).show())}),pe.template.aloneDisplay&&(v()(".show-group").click(function(){const q="."+v()(this).attr("data-group")+"-group",X="."+v()(this).attr("data-group")+"-article";v()(".show-api-group").addClass("hide"),v()(q).removeClass("hide"),v()(".show-api-article").addClass("hide"),v()(X).removeClass("hide")}),v()(".show-api").click(function(){const q=this.getAttribute("href").substring(1),X=document.getElementById("version").textContent.trim(),ee=`.${this.dataset.name}-article`,se=`[id="${q}-${X}"]`,ue=`.${this.dataset.group}-group`;v()(".show-api-group").addClass("hide"),v()(ue).removeClass("hide"),v()(".show-api-article").addClass("hide");let me=v()(ee);v()(se).length&&(me=v()(se).parent()),me.removeClass("hide"),q.match(/_(header|footer)/)&&document.getElementById(q).classList.remove("hide")})),pe.template.aloneDisplay||v()("body").scrollspy("refresh"),pe.template.aloneDisplay){const q=window.location.hash;if(q!=null&&q.length!==0){const X=document.getElementById("version").textContent.trim(),ee=document.querySelector(`li .${q.slice(1)}-init`),se=document.querySelector(`li[data-version="${X}"] .show-api.${q.slice(1)}-init`);let ue=ee;se&&(ue=se),ue.click()}}}function kt(Y){typeof Y=="undefined"?Y=v()("#version strong").html():v()("#version strong").html(Y),v()("article").addClass("hide"),v()("#sidenav li:not(.nav-fixed)").addClass("hide");const q={};document.querySelectorAll("article[data-version]").forEach(X=>{const ee=X.dataset.group,se=X.dataset.name,ue=X.dataset.version,me=ee+se;!q[me]&&o().lte(ue,Y)&&(q[me]=!0,document.querySelector(`article[data-group="${ee}"][data-name="${se}"][data-version="${ue}"]`).classList.remove("hide"),document.querySelector(`#sidenav li[data-group="${ee}"][data-name="${se}"][data-version="${ue}"]`).classList.remove("hide"),document.querySelector(`#sidenav li.nav-header[data-group="${ee}"]`).classList.remove("hide"))}),v()("article[data-version]").each(function(X){const ee=v()(this).data("group");v()("section#api-"+ee).removeClass("hide"),v()("section#api-"+ee+" article:visible").length===0?v()("section#api-"+ee).addClass("hide"):v()("section#api-"+ee).removeClass("hide")})}if(kt(),v()("#versions li.version a").on("click",function(Y){Y.preventDefault(),kt(v()(this).html())}),v()("#compareAllWithPredecessor").on("click",Ut),v()("article .versions li.version a").on("click",dt),v().urlParam=function(Y){const q=new RegExp("[\\?&amp;]"+Y+"=([^&amp;#]*)").exec(window.location.href);return q&&q[1]?q[1]:null},v().urlParam("compare")&&v()("#compareAllWithPredecessor").trigger("click"),window.location.hash){const Y=decodeURI(window.location.hash);v()(Y).length>0&&v()("html,body").animate({scrollTop:parseInt(v()(Y).offset().top)},0)}v()("#scrollingNav .sidenav-search input.search").focus(),v()('[data-action="filter-search"]').on("keyup",Y=>{const q=Y.currentTarget.value.toLowerCase();v()(".sidenav").find("a.nav-list-item").each((X,ee)=>{v()(ee).show(),ee.innerText.toLowerCase().includes(q)||v()(ee).hide()})}),v()("span.search-reset").on("click",function(){v()("#scrollingNav .sidenav-search input.search").val("").focus(),v()(".sidenav").find("a.nav-list-item").show()});function dt(Y){Y.preventDefault();const q=v()(this).parents("article"),X=v()(this).html(),ee=q.find(".version"),se=ee.find("strong").html();ee.find("strong").html(X);const ue=q.data("group"),me=q.data("name"),Ee=q.data("version"),Te=q.data("compare-version");if(Te!==X&&!(!Te&&Ee===X)){if(Te&&Fn[ue][me][0]===X||Ee===X)Kt(ue,me,Ee);else{let Ie={},He={};v().each(Ge[ue][me],function(rn,Zn){Zn.version===Ee&&(Ie=Zn),Zn.version===X&&(He=Zn)});const ve={article:Ie,compare:He,versions:Fn[ue][me]};ve.article.id=ve.article.group+"-"+ve.article.name+"-"+ve.article.version,ve.article.id=ve.article.id.replace(/\./g,"_"),ve.compare.id=ve.compare.group+"-"+ve.compare.name+"-"+ve.compare.version,ve.compare.id=ve.compare.id.replace(/\./g,"_");let je=Ie;je.parameter&&je.parameter.fields&&(ve._hasTypeInParameterFields=vn(je.parameter.fields)),je.error&&je.error.fields&&(ve._hasTypeInErrorFields=vn(je.error.fields)),je.success&&je.success.fields&&(ve._hasTypeInSuccessFields=vn(je.success.fields)),je.info&&je.info.fields&&(ve._hasTypeInInfoFields=vn(je.info.fields)),je=He,ve._hasTypeInParameterFields!==!0&&je.parameter&&je.parameter.fields&&(ve._hasTypeInParameterFields=vn(je.parameter.fields)),ve._hasTypeInErrorFields!==!0&&je.error&&je.error.fields&&(ve._hasTypeInErrorFields=vn(je.error.fields)),ve._hasTypeInSuccessFields!==!0&&je.success&&je.success.fields&&(ve._hasTypeInSuccessFields=vn(je.success.fields)),ve._hasTypeInInfoFields!==!0&&je.info&&je.info.fields&&(ve._hasTypeInInfoFields=vn(je.info.fields));const Sn=he(ve);q.after(Sn),q.next().find(".versions li.version a").on("click",dt),v()("#sidenav li[data-group='"+ue+"'][data-name='"+me+"'][data-version='"+se+"']").addClass("has-modifications"),q.remove()}y().highlightAll()}}function Ut(Y){Y.preventDefault(),v()("article:visible .versions").each(function(){const X=v()(this).parents("article").data("version");let ee=null;v()(this).find("li.version a").each(function(){v()(this).html()<X&&!ee&&(ee=v()(this))}),ee&&ee.trigger("click")})}function Rt(Y,q){Y.id=Y.article.group+"-"+Y.article.name+"-"+Y.article.version,Y.id=Y.id.replace(/\./g,"_"),q.header&&q.header.fields&&(Y._hasTypeInHeaderFields=vn(q.header.fields)),q.parameter&&q.parameter.fields&&(Y._hasTypeInParameterFields=vn(q.parameter.fields)),q.error&&q.error.fields&&(Y._hasTypeInErrorFields=vn(q.error.fields)),q.success&&q.success.fields&&(Y._hasTypeInSuccessFields=vn(q.success.fields)),q.info&&q.info.fields&&(Y._hasTypeInInfoFields=vn(q.info.fields)),Y.template=pe.template}function po(Y,q,X){let ee={};v().each(Ge[Y][q],function(ue,me){me.version===X&&(ee=me)});const se={article:ee,versions:Fn[Y][q]};return Rt(se,ee),ie(se)}function Kt(Y,q,X){const ee=v()("article[data-group='"+Y+"'][data-name='"+q+"']:visible"),se=po(Y,q,X);ee.after(se),ee.next().find(".versions li.version a").on("click",dt),v()("#sidenav li[data-group='"+Y+"'][data-name='"+q+"'][data-version='"+X+"']").removeClass("has-modifications"),ee.remove()}function L(Y,q,X){const ee=[];return q.forEach(function(se){X?Y.forEach(function(ue){const me=ue.split(X);(me[0]===se||me[1]===se)&&ee.push(ue)}):Y.forEach(function(ue){ue===se&&ee.push(se)})}),Y.forEach(function(se){ee.indexOf(se)===-1&&ee.push(se)}),ee}function G(Y,q){const X=[];return q.forEach(ee=>{Object.keys(Y).forEach(se=>{Y[se].replace(/_/g," ")===ee&&X.push(se)})}),Object.keys(Y).forEach(ee=>{X.indexOf(ee)===-1&&X.push(ee)}),X}Nt()}})()})();
